@@ -1,0 +1,446 @@
+{
+	"info": {
+		"_postman_id": "1b6a8d95-dc53-42ff-9cc5-921962bccf84",
+		"name": "Validator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5000/status",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET cpfs All",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5000/cpfs",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cpfs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET cnpj All",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5000/cnpjs",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cnpjs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cpfs/{cpf}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/cpfs/838.461.722-86",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cpfs",
+						"838.461.722-86"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET cnpj/{cnpj}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5000/cnpjs/36.562.098/0001-18",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cnpjs",
+						"36.562.098",
+						"0001-18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5000/all",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cnpj/{cnpj}Invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([404, 406]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/cnpjs/36.562.098/0001-16",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cnpjs",
+						"36.562.098",
+						"0001-16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cpf/{cnpj} Invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([404, 406]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/cpfs/36.562.0980001-18",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cpfs",
+						"36.562.0980001-18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE cpfs/{cpf}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/cpfs/838.461.722-86",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cpfs",
+						"838.461.722-86"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DEL cnpj/{cnpj}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/cnpjs/36.562.098/0001-18",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"cnpjs",
+						"36.562.098",
+						"0001-18"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

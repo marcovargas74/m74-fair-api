@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+
+  mongo:
+    image: "mongo"
+    container_name: "goMongoDB"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      
+    ports:
+      - "27016:27017"
+
+  my-validate-api:    
+    image: m74fairapi:latest 
+    container_name: m74fairapi 
+    environment: 
+      - MONGO_URL=mongodb://root:example@mongo:27017/
+    ports:      
+      - "5000:5000"
+    depends_on:
+      - mongo
+    # Reference https://betterprogramming.pub/setting-up-mysql-database-in-a-docker-d6c69a3e9afe
+
