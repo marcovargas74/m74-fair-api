@@ -1,3 +1,5 @@
 .vscode/*.log
 *.log
 src/fair/main
+.vscode/configurationCache.log
+.vscode/dryrun.log
