@@ -1,8 +1,11 @@
 package logs
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"runtime"
+	"strings"
 
 	"github.com/rs/zerolog"
 )
@@ -15,6 +18,17 @@ var AppFileLog *os.File
 
 //Logger Variavel usado no Log
 var Logger zerolog.Logger
+
+// return the source filename after the last slash
+func chopPath(original string) string {
+	i := strings.LastIndex(original, "/")
+	return original[i+1:]
+}
+
+func ThisFunction() string {
+	function, _, line, _ := runtime.Caller(1)
+	return fmt.Sprintf("%s(%d)", chopPath(runtime.FuncForPC(function).Name()), line)
+}
 
 //StartLogger Inicia Login da aplicação
 //isProg true to show message
@@ -44,18 +58,28 @@ func StartLogger(isProg bool, filepath string) {
 
 //LoggerClose Finish the Logger
 func LoggerClose() {
-	//AppSyslog(syslog.LOG_INFO, "%s {LOG_FINISH}\n", ThisFunction())
 	AppFileLog.Close()
 }
 
-func Start() {
-	AppFileLog, err := os.OpenFile("./zero.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
+func Start(isProg bool, filepath string) {
+
+	if filepath == "" {
+		filepath = "./myApp.log"
+	}
+	AppFileLog, err := os.OpenFile(filepath, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
+	//AppFileLog, err := os.OpenFile("./zero.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		log.Panic(err)
 	}
 	//defer file.Close()
-	logger := zerolog.New(AppFileLog).With().Timestamp().Logger()
-	logger.Debug().Msg("Log STARTED!")
+	if !isProg {
+		Logger = zerolog.New(os.Stdout)
+		return
+	}
+
+	//logger := zerolog.New(AppFileLog).With().Timestamp().Logger()
+
+	Logger.Debug().Msg(" ------Log STARTED!-------")
 	Logger = zerolog.New(AppFileLog).With().Timestamp().Logger()
 
 }
