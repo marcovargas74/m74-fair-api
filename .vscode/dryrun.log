@@ -5,7 +5,7 @@ rm -rf build
 go get -v ./...
 go test -v ./...
 cd src/fair && go vet && go build main.go 
-docker build -t m74fair .
+docker build -t m74fairapi .
 cd docker && docker-compose up -d
 make: Leaving directory '/home/intelbras/projetos-go/src/github.com/marcovargas74/m74-fair-api'
  
