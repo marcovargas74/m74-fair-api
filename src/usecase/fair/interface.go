@@ -27,7 +27,7 @@ type Repository interface {
 //UseCase interface
 type UseCase interface {
 	GetFair(id entity.ID) (*entity.Fair, error)
-	SearchFair(query string) ([]*entity.Fair, error)
+	SearchFairs(query string) ([]*entity.Fair, error)
 	ListFairs() ([]*entity.Fair, error)
 	CreateFair(name string, district string, region5 string, neighborhood string) (entity.ID, error)
 	UpdateFair(e *entity.Fair) error
