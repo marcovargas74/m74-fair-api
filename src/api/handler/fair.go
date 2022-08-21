@@ -1,14 +1,18 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/marcovargas74/m74-val-cpf-cnpj/src/api/presenter"
+	"github.com/marcovargas74/m74-val-cpf-cnpj/src/entity"
 	"github.com/marcovargas74/m74-val-cpf-cnpj/src/infrastructure/logs"
+	"github.com/marcovargas74/m74-val-cpf-cnpj/src/usecase/fair"
+	"github.com/urfave/negroni"
 )
-
 
 func CallbackListFair(w http.ResponseWriter, r *http.Request) {
 
@@ -17,6 +21,148 @@ func CallbackListFair(w http.ResponseWriter, r *http.Request) {
 	log.Printf("METHOD[%s] DefaultEndpointFair \n", r.Method)
 	w.WriteHeader(http.StatusAccepted)
 
+}
+
+func listFairs(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error reading Fair"
+		var data []*entity.Fair
+		var err error
+		name := r.URL.Query().Get("id")
+		logs.Debug("listFairs name %s \n", name)
+		switch {
+		case name == "":
+			data, err = service.ListFairs()
+			logs.Debug("service ListFairs name %s \n", name)
+		default:
+			data, err = service.SearchFairs(name)
+			logs.Debug("service SearchFairs name %s \n", name)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+
+		if data == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(errorMessage))
+			return
+		}
+		var toJ []*presenter.Fair
+		for _, d := range data {
+			toJ = append(toJ, &presenter.Fair{
+				ID:           d.ID,
+				Name:         d.Name,
+				District:     d.District,
+				Region5:      d.Region5,
+				Neighborhood: d.Neighborhood,
+			})
+		}
+		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+		}
+	})
+}
+
+func createFair(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error adding Fair"
+		var input struct {
+			Name         string `json:"name"`
+			District     string `json:"district"`
+			Region5      string `json:"region5"`
+			Neighborhood string `json:"neighborhood"`
+		}
+		err := json.NewDecoder(r.Body).Decode(&input)
+		if err != nil {
+			log.Println(err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			logs.Error("DecodeJSON1 %s \n", errorMessage)
+			return
+		}
+		id, err := service.CreateFair(input.Name, input.District, input.Region5, input.Neighborhood)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			logs.Error("InPUT DATA %s \n", errorMessage)
+			return
+		}
+		toJ := &presenter.Fair{
+			ID:           id,
+			Name:         input.Name,
+			District:     input.District,
+			Region5:      input.Region5,
+			Neighborhood: input.Neighborhood,
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+			log.Println(err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			logs.Error("ENCODEJSON1 %s \n", errorMessage)
+			return
+		}
+	})
+}
+
+func getFair(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error reading fair"
+		vars := mux.Vars(r)
+		id, err := entity.StringToID(vars["id"])
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+		data, err := service.GetFair(id)
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+
+		if data == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(errorMessage))
+			return
+		}
+		toJ := &presenter.Fair{
+			ID:           data.ID,
+			Name:         data.Name,
+			District:     data.District,
+			Region5:      data.Region5,
+			Neighborhood: data.Neighborhood,
+		}
+		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+		}
+	})
+}
+
+func deleteFair(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error removing Fair"
+		vars := mux.Vars(r)
+		id, err := entity.StringToID(vars["id"])
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+		err = service.DeleteFair(id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+	})
 }
 
 func CallbackCreateFair(w http.ResponseWriter, r *http.Request) {
@@ -51,13 +197,22 @@ func CallbackFairDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 //NewServerAPI Create Server
-func MakeFairHandlers(r *mux.Router) {
+func MakeFairHandlers(r *mux.Router, n negroni.Negroni, service fair.UseCase) {
 
-	r.HandleFunc("/fair", CallbackListFair).Methods("GET", "OPTIONS")
-	r.HandleFunc("/fair", CallbackCreateFair).Methods("POST", "OPTIONS")
+	//r.HandleFunc("/fair", CallbackListFair).Methods("GET", "OPTIONS")
 
-	r.HandleFunc("/fair/{name}", CallbackFairGet).Methods("GET", "OPTIONS")
-	r.HandleFunc("/fair/{name}", CallbackFairDelete).Methods("DELETE", "OPTIONS")
+	//r.HandleFunc("/fair", listFairs(service)).Methods("GET", "OPTIONS")
+
+	r.Handle("/fair", n.With(negroni.Wrap(listFairs(service)))).Methods("GET", "OPTIONS").Name("listFairs")
+	r.Handle("/fair", n.With(negroni.Wrap(createFair(service)))).Methods("POST", "OPTIONS").Name("createFair")
+
+	//	r.HandleFunc("/fair", CallbackCreateFair).Methods("POST", "OPTIONS")
+
+	//r.HandleFunc("/fair/{id}", CallbackFairGet).Methods("GET", "OPTIONS")
+	//r.HandleFunc("/fair/{name}", CallbackFairDelete).Methods("DELETE", "OPTIONS")
+	r.Handle("/fair/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET", "OPTIONS").Name("getFair")
+
+	r.Handle("/fair/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE", "OPTIONS").Name("deleteFair")
 
 	//MakeBookHandlers make url handlers
 	/*
@@ -348,17 +503,5 @@ func deleteBook(service book.UseCase) http.Handler {
 		}
 	})
 }
-
-*/
-
-
-
-
-
-
-
-
-
-
 
 */
