@@ -6,9 +6,9 @@ import (
 
 //Fair data
 type Fair struct {
-	ID       entity.ID `json:"id"`
-	Title    string    `json:"title"`
-	Author   string    `json:"author"`
-	Pages    int       `json:"pages"`
-	Quantity int       `json:"quantity"`
+	ID           entity.ID `json:"id"`
+	Name         string    `json:"name"`
+	District     string    `json:"district"`
+	Region5      string    `json:"region5"`
+	Neighborhood string    `json:"neighborhood"`
 }
