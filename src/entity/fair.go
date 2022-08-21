@@ -59,8 +59,17 @@ func (f *Fair) Validate() error {
 }
 
 /*
+	Name         string 30
+	District     string 18
+	Region5      string 6
+	Neighborhood string 20
+
 Nome da variável,Descrição da variável,Fonte,Tipo,Tamanho
+
 ID,Identificador,Número de identificação do estabelecimento georreferenciado por SMDU/Deinfo,SMDU/Deinfo,TEXTO,08
+NOME_FEIRA,Nome da feira livre,Denominação da feira livre atribuída pela Supervisão de Abastecimento,SMSP/AB,TEXTO,30
+
+
 DEINFO_AB_FEIRASLIVRES_2014,LONG,Longitude,"Longitude da localização do estabelecimento no território do Município, conforme MDC",SMDU/Deinfo,TEXTO,10
 
 DEINFO_AB_FEIRASLIVRES_2014,LAT,Latitude,"Latitude da localização do estabelecimento no território do Município, conforme MDC",SMDU/Deinfo,TEXTO,10
