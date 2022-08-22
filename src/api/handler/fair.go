@@ -7,10 +7,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/api/presenter"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/entity"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/infrastructure/logs"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/usecase/fair"
+	"github.com/marcovargas74/m74-fair-api/src/api/presenter"
+	"github.com/marcovargas74/m74-fair-api/src/entity"
+	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
+	"github.com/marcovargas74/m74-fair-api/src/usecase/fair"
 	"github.com/urfave/negroni"
 )
 
@@ -114,7 +114,11 @@ func getFair(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error reading fair"
 		vars := mux.Vars(r)
+
+		logs.Debug("getFair vars %v \n", vars)
 		id, err := entity.StringToID(vars["id"])
+		logs.Debug("getFair id [%v] \n", id)
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(errorMessage))
@@ -150,7 +154,11 @@ func deleteFair(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error removing Fair"
 		vars := mux.Vars(r)
+
+		logs.Debug("deleteFair vars %v \n", vars)
 		id, err := entity.StringToID(vars["id"])
+		logs.Debug("deleteFair id [%v] \n", id)
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(errorMessage))
@@ -162,6 +170,8 @@ func deleteFair(service fair.UseCase) http.Handler {
 			w.Write([]byte(errorMessage))
 			return
 		}
+		w.Write([]byte("Sucesso ao deletar Feira"))
+
 	})
 }
 

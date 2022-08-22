@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/entity"
+	"github.com/marcovargas74/m74-fair-api/src/entity"
 )
 
 //Service fair usecase

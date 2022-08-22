@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/entity"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/infrastructure/logs"
+	"github.com/marcovargas74/m74-fair-api/src/entity"
+	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
 //AddrOpenDB VAR used to open and to access BD
