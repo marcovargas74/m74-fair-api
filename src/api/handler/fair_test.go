@@ -7,9 +7,13 @@ import (
 
 	"github.com/magiconair/properties/assert"
 	"github.com/marcovargas74/m74-fair-api/src/entity"
+	logs "github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
 func TestServerAPI(t *testing.T) {
+
+	logs.Start(false, "./fairAPI.log")
+
 	assert.Equal(t, 1, 1)
 
 }
@@ -71,6 +75,72 @@ func TestServerAPIDefaultPost(t *testing.T) {
 
 	}
 
+}
+
+func TestCreateFairFail(t *testing.T) {
+
+	tests := []struct {
+		give      string
+		wantValue int
+		inData    string
+	}{
+		{
+			give:      "Fair Endpoint test with NOBODY",
+			wantValue: 405,
+			inData:    "Nobody",
+		},
+		{
+			give:      "Fair Endpoint test with empty char",
+			wantValue: 404,
+			inData:    "",
+		},
+		{
+			give:      "Fair Endpoint test with Invalid data",
+			wantValue: 405,
+			inData:    "nome:feira",
+		},
+	}
+
+	server := NewServerAPIMemory()
+	for _, tt := range tests {
+		t.Run(tt.give, func(t *testing.T) {
+
+			request := entity.NewReqEndpointsPOST("/fair", tt.inData)
+			answer := httptest.NewRecorder()
+
+			server.ServeHTTP(answer, request)
+			assert.Equal(t, answer.Code, tt.wantValue)
+		})
+
+	}
+}
+
+func TestCreateFair(t *testing.T) {
+
+	tests := []struct {
+		give      string
+		wantValue int
+		inData    string
+	}{
+		{
+			give:      "Fair Endpoint test with NOBODY",
+			wantValue: 405,
+			inData:    "Nobody",
+		},
+	}
+
+	server := NewServerAPIMemory()
+	for _, tt := range tests {
+		t.Run(tt.give, func(t *testing.T) {
+
+			request := entity.NewReqEndpointsBodyPOST("/fair", tt.inData, tt.inData)
+			answer := httptest.NewRecorder()
+
+			server.ServeHTTP(answer, request)
+			assert.Equal(t, answer.Code, tt.wantValue)
+		})
+
+	}
 }
 
 /*
@@ -195,44 +265,6 @@ func TestCallbackCpfsGET(t *testing.T) {
 
 	}
 
-}
-
-func TestCallbackCpfsPost(t *testing.T) {
-
-	tests := []struct {
-		give      string
-		wantValue int
-		inData    string
-	}{
-		{
-			give:      "cpfs Endpoint test with NOBODY",
-			wantValue: 400,
-			inData:    "Nobody",
-		},
-		{
-			give:      "cpfs Endpoint test with empty char",
-			wantValue: 404,
-			inData:    "",
-		},
-		{
-			give:      "cpfs Endpoint test with CNPJ",
-			wantValue: 404,
-			inData:    "36.562.098/0001-18",
-		},
-	}
-
-	server := NewServerValidator("dev")
-	for _, tt := range tests {
-		t.Run(tt.give, func(t *testing.T) {
-
-			request := newReqEndpointsPOST("/cpfs", tt.inData)
-			answer := httptest.NewRecorder()
-
-			server.ServeHTTP(answer, request)
-			assert.Equal(t, answer.Code, tt.wantValue)
-		})
-
-	}
 }
 
 */
