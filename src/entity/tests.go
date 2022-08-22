@@ -1,12 +1,15 @@
 package entity
 
 import (
+	"fmt"
+	"net/http"
 	"testing"
 	"time"
 )
 
 const (
-	erroMsg = "Test fail got Value[%v], wait Value [%v]"
+	erroMsg       = "Test fail got Value[%v], wait Value [%v]"
+	UserAgentTest = "self_test"
 )
 
 //CheckIfEqualString check if result is OK type string
@@ -55,4 +58,25 @@ func CheckIfUptimeIsOK(t *testing.T, gotValue, waitValue float64) {
 	if gotValue <= waitValue {
 		t.Errorf(erroMsg, gotValue, waitValue)
 	}
+}
+
+func newReqEndpointsGET(urlPrefix, urlName string) *http.Request {
+	request, error := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
+	if error != nil {
+		panic(error)
+	}
+
+	request.Header.Set("User-Agent", UserAgentTest)
+	fmt.Printf("endpoint: %v\n", request.URL)
+	return request
+}
+
+func newReqEndpointsPOST(urlPrefix, urlName string) *http.Request {
+	request, error := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
+	if error != nil {
+		panic(error)
+	}
+
+	request.Header.Set("User-Agent", UserAgentTest)
+	return request
 }

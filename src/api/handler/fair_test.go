@@ -6,35 +6,9 @@ import (
 	"testing"
 
 	"github.com/magiconair/properties/assert"
-	//"github.com/marcovargas74/m74-fair-api/src/api/handler"
+	"github.com/marcovargas74/m74-fair-api/src/entity"
 )
 
-const (
-	UserAgentTest = "self_test"
-)
-
-/*
-func newReqEndpointsGET(urlPrefix, urlName string) *http.Request {
-	request, error := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
-	if error != nil {
-		panic(error)
-	}
-
-	request.Header.Set("User-Agent", UserAgentTest)
-	fmt.Printf("endpoint: %v\n", request.URL)
-	return request
-}
-
-func newReqEndpointsPOST(urlPrefix, urlName string) *http.Request {
-	request, error := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
-	if error != nil {
-		panic(error)
-	}
-
-	request.Header.Set("User-Agent", UserAgentTest)
-	return request
-}
-*/
 func TestServerAPI(t *testing.T) {
 	assert.Equal(t, 1, 1)
 
@@ -87,7 +61,7 @@ func TestServerAPIDefaultPost(t *testing.T) {
 		t.Run(tt.give, func(t *testing.T) {
 
 			request, _ := http.NewRequest(http.MethodPost, "/", nil)
-			request.Header.Set("User-Agent", UserAgentTest)
+			request.Header.Set("User-Agent", entity.UserAgentTest)
 			answer := httptest.NewRecorder()
 
 			server.ServeHTTP(answer, request)
