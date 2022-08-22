@@ -123,13 +123,13 @@ func (r *FairMySQL) Update(e *entity.Fair) error {
 }
 
 //Search fairs
-func (r *FairMySQL) Search(query string) ([]*entity.Fair, error) {
+func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 	stmt, err := r.db.Prepare(`select id, name, district, region5, neighborhood, created_at from fair where name like ?`)
 	if err != nil {
 		return nil, err
 	}
 	var fairs []*entity.Fair
-	rows, err := stmt.Query("%" + query + "%")
+	rows, err := stmt.Query("%" + value + "%")
 	if err != nil {
 		return nil, err
 	}

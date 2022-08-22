@@ -42,8 +42,8 @@ func (s *Service) GetFair(id entity.ID) (*entity.Fair, error) {
 }
 
 //SearchFairs search Fair
-func (s *Service) SearchFairs(query string) ([]*entity.Fair, error) {
-	fairs, err := s.repo.Search(strings.ToLower(query))
+func (s *Service) SearchFairs(key string, value string) ([]*entity.Fair, error) {
+	fairs, err := s.repo.Search(strings.ToLower(key), strings.ToLower(value))
 	if err != nil {
 		return nil, err
 	}

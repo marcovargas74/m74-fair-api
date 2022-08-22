@@ -44,10 +44,10 @@ func (r *inmem) Update(e *entity.Fair) error {
 }
 
 //Search Fair
-func (r *inmem) Search(query string) ([]*entity.Fair, error) {
+func (r *inmem) Search(key string, value string) ([]*entity.Fair, error) {
 	var d []*entity.Fair
 	for _, j := range r.m {
-		if strings.Contains(strings.ToLower(j.Name), query) {
+		if strings.Contains(strings.ToLower(j.Name), value) {
 			d = append(d, j)
 		}
 	}

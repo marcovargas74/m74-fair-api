@@ -14,40 +14,72 @@ import (
 	"github.com/urfave/negroni"
 )
 
-func CallbackListFair(w http.ResponseWriter, r *http.Request) {
-
-	w.Header().Set("content-type", "application/json")
-	fmt.Printf("Default data in %v\n", r.URL)
-	log.Printf("METHOD[%s] DefaultEndpointFair \n", r.Method)
-	w.WriteHeader(http.StatusAccepted)
-
-}
-
 func listFairs(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//servercpfcnpj.CreateDB()
 		errorMessage := "Error reading Fair"
 		var data []*entity.Fair
 		var err error
-		name := r.URL.Query().Get("id")
-		logs.Debug("listFairs name %s \n", name)
+
+		key := ""
+		name := r.URL.Query().Get("name")
+		if name != "" {
+			key = "name"
+		}
+
+		district := r.URL.Query().Get("district")
+		if district != "" {
+			key = "district"
+		}
+
+		region5 := r.URL.Query().Get("region5")
+		if region5 != "" {
+			key = "region5"
+		}
+
+		neighborhood := r.URL.Query().Get("neighborhood")
+		if neighborhood != "" {
+			key = "neighborhood"
+		}
+
+		logs.Debug("listFairs key %s \n", key)
 		switch {
-		case name == "":
+		case key == "":
 			data, err = service.ListFairs()
-			logs.Debug("service ListFairs name %s \n", name)
+			logs.Debug("service ListFairs key %s \n", key)
+
+		case key == "name":
+			data, err = service.SearchFairs(key, name)
+			logs.Debug("service ListFairs key %s \n", key)
+
+		case key == "district":
+			data, err = service.SearchFairs(key, district)
+			logs.Debug("service ListFairs key %s \n", key)
+
+		case key == "region5":
+			data, err = service.SearchFairs(key, region5)
+			logs.Debug("service ListFairs key %s \n", key)
+
+		case key == "neighborhood":
+			data, err = service.SearchFairs(key, neighborhood)
+			logs.Debug("service ListFairs key %s \n", key)
+
 		default:
-			data, err = service.SearchFairs(name)
-			logs.Debug("service SearchFairs name %s \n", name)
+			data, err = service.SearchFairs(key, name)
+			logs.Debug("service SearchFairs key %s \n", name)
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			//w.Write([]byte(errorMessage))
+			fmt.Fprint(w, errorMessage)
+			fmt.Fprint(w, entity.ErrNotFound.Error())
 			return
 		}
 
 		if data == nil {
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(errorMessage))
+			fmt.Fprint(w, entity.ErrNotFound.Error())
 			return
 		}
 		var toJ []*presenter.Fair
@@ -209,73 +241,27 @@ func CallbackFairDelete(w http.ResponseWriter, r *http.Request) {
 //NewServerAPI Create Server
 func MakeFairHandlers(r *mux.Router, n negroni.Negroni, service fair.UseCase) {
 
-	//r.HandleFunc("/fair", CallbackListFair).Methods("GET", "OPTIONS")
-
-	//r.HandleFunc("/fair", listFairs(service)).Methods("GET", "OPTIONS")
-
 	r.Handle("/fair", n.With(negroni.Wrap(listFairs(service)))).Methods("GET", "OPTIONS").Name("listFairs")
 	r.Handle("/fair", n.With(negroni.Wrap(createFair(service)))).Methods("POST", "OPTIONS").Name("createFair")
 
-	//	r.HandleFunc("/fair", CallbackCreateFair).Methods("POST", "OPTIONS")
-
-	//r.HandleFunc("/fair/{id}", CallbackFairGet).Methods("GET", "OPTIONS")
-	//r.HandleFunc("/fair/{name}", CallbackFairDelete).Methods("DELETE", "OPTIONS")
 	r.Handle("/fair/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET", "OPTIONS").Name("getFair")
-
 	r.Handle("/fair/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE", "OPTIONS").Name("deleteFair")
 
-	//MakeBookHandlers make url handlers
 	/*
 		func MakeBookHandlers(r *mux.Router, n negroni.Negroni, service book.UseCase) {
 		r.Handle("/v1/book", n.With(
 			negroni.Wrap(listBooks(service)),
 		)).Methods("GET", "OPTIONS").Name("listBooks")
 
-		r.Handle("/v1/book", n.With(
-			negroni.Wrap(createBook(service)),
-		)).Methods("POST", "OPTIONS").Name("createBook")
-
 		r.Handle("/v1/book/{id}", n.With(
 			negroni.Wrap(getBook(service)),
 		)).Methods("GET", "OPTIONS").Name("getBook")
 
-		r.Handle("/v1/book/{id}", n.With(
-			negroni.Wrap(deleteBook(service)),
-		)).Methods("DELETE", "OPTIONS").Name("deleteBook")*/
-	//}
+	//}*/
 
 }
 
 /*
-//CallbackStatus function Used to handle endpoint /status
-func (s *ServerValidator) CallbackStatus(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("METHOD[%s] STATUS [%s] \n", r.Method, r.UserAgent())
-	cpfcnpj.ShowStatus(w, r)
-	w.WriteHeader(http.StatusOK)
-
-}
-
-//CallbackQuerysAll function Used to handle endpoint /all
-func (s *ServerValidator) CallbackQuerysAll(w http.ResponseWriter, r *http.Request) {
-
-	var aQueryJSON cpfcnpj.MyQuery
-	log.Printf("METHOD[%s] SHOW ALL CPF AND CNPJs \n", r.Method)
-	aQueryJSON.QuerysHTTP(w, r)
-	cpfcnpj.UpdateStatus()
-
-}
-
-//CallbackQuerysCPFAll function Used to handle endpoint /cpfs/
-func (s *ServerValidator) CallbackQuerysCPFAll(w http.ResponseWriter, r *http.Request) {
-
-	var aQueryJSON cpfcnpj.MyQuery
-	log.Printf("METHOD[%s] SHOW ALL CPFs \n", r.Method)
-
-	aQueryJSON.QuerysByTypeHTTP(w, r, cpfcnpj.IsCPF)
-	cpfcnpj.UpdateStatus()
-
-}
 
 //CallbackQuerysByNum function Used to handle endpoint /{cpf_or_cnpj_num}
 func (s *ServerValidator) CallbackQuerysByNum(w http.ResponseWriter, r *http.Request) {
