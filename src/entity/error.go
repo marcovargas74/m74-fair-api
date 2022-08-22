@@ -16,3 +16,6 @@ var ErrNotExist = errors.New("Not Exist")
 
 //ErrIsEmpty not found
 var ErrIsEmpty = errors.New("is Empty")
+
+//ErrCannotConvertJSON Cannot Convert to Json Format
+var ErrCannotConvertJSON = errors.New("Cannot Convert to Json Format")

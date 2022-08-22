@@ -50,7 +50,7 @@ func NewFair(name string, district string, region5 string, neighborhood string) 
 	return f, nil
 }
 
-//Validate validate book
+//Validate validate Fair
 func (f *Fair) Validate() error {
 	if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
 		return ErrInvalidEntity

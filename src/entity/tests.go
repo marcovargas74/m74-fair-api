@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"testing"
@@ -60,7 +61,8 @@ func CheckIfUptimeIsOK(t *testing.T, gotValue, waitValue float64) {
 	}
 }
 
-func newReqEndpointsGET(urlPrefix, urlName string) *http.Request {
+//NewReqEndpointsGET Genetic GET endpoint to test
+func NewReqEndpointsGET(urlPrefix, urlName string) *http.Request {
 	request, error := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
 	if error != nil {
 		panic(error)
@@ -71,8 +73,32 @@ func newReqEndpointsGET(urlPrefix, urlName string) *http.Request {
 	return request
 }
 
-func newReqEndpointsPOST(urlPrefix, urlName string) *http.Request {
+//NewReqEndpointsPOST Genetic POST endpoint to test
+func NewReqEndpointsPOST(urlPrefix, urlName string) *http.Request {
 	request, error := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
+	if error != nil {
+		panic(error)
+	}
+
+	request.Header.Set("User-Agent", UserAgentTest)
+	return request
+}
+
+//NewReqEndpointsBodyPOST Genetic POST endpoint to test
+func NewReqEndpointsBodyPOST(urlPrefix, urlName string, json string) *http.Request {
+
+	//jsonBody := []byte(`{"client_message": "hello, server!"}`)
+	jsonBody := []byte(`{
+		"name": "VILA TESTE",
+		"District": "dstrito teste",
+		"Region5": "test",
+		"neighborhood" :"bairo"
+	}
+      `)
+
+	bodyReader := bytes.NewReader(jsonBody)
+
+	request, error := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", urlPrefix, urlName), bodyReader)
 	if error != nil {
 		panic(error)
 	}

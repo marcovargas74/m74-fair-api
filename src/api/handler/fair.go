@@ -72,7 +72,6 @@ func listFairs(service fair.UseCase) http.Handler {
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			//w.Write([]byte(errorMessage))
-			fmt.Fprint(w, errorMessage)
 			fmt.Fprint(w, entity.ErrNotFound.Error())
 			return
 		}
@@ -102,20 +101,23 @@ func listFairs(service fair.UseCase) http.Handler {
 func createFair(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error adding Fair"
-		var input struct {
-			Name         string `json:"name"`
-			District     string `json:"district"`
-			Region5      string `json:"region5"`
-			Neighborhood string `json:"neighborhood"`
-		}
+		fmt.Println("PASSOU AQUI")
+		logs.Debug("createFair !!!!! %s \n", errorMessage)
+		var input presenter.Fair
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			log.Println(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
-			logs.Error("DecodeJSON1 %s \n", errorMessage)
+			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
+			logs.Error("DecodeJSON1 %s \n", err.Error())
 			return
 		}
+		defer r.Body.Close()
+
+		if errs := input.Validate(); errs != nil {
+			log.Printf("INVALIDO %v\n", errs)
+			w.WriteHeader(http.StatusBadRequest)
+		}
+
 		id, err := service.CreateFair(input.Name, input.District, input.Region5, input.Neighborhood)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -123,22 +125,15 @@ func createFair(service fair.UseCase) http.Handler {
 			logs.Error("InPUT DATA %s \n", errorMessage)
 			return
 		}
-		toJ := &presenter.Fair{
-			ID:           id,
-			Name:         input.Name,
-			District:     input.District,
-			Region5:      input.Region5,
-			Neighborhood: input.Neighborhood,
-		}
 
-		w.WriteHeader(http.StatusCreated)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			log.Println(err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
-			logs.Error("ENCODEJSON1 %s \n", errorMessage)
-			return
+		input.ID = id
+		json, err := json.Marshal(input)
+		if err != nil {
+			log.Println(err)
 		}
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, string(json))
+		w.WriteHeader(http.StatusCreated)
 	})
 }
 

@@ -12,3 +12,11 @@ type Fair struct {
 	Region5      string    `json:"region5"`
 	Neighborhood string    `json:"neighborhood"`
 }
+
+//Validate validate book
+func (f *Fair) Validate() error {
+	if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
+		return entity.ErrInvalidEntity
+	}
+	return nil
+}
