@@ -11,11 +11,8 @@ var ErrInvalidEntity = errors.New("Invalid entity")
 //ErrCannotBeDeleted cannot be deleted
 var ErrCannotBeDeleted = errors.New("Cannot Be Deleted")
 
-// //ErrNotEnoughBooks cannot borrow
-// var ErrNotEnoughBooks = errors.New("Not enough books")
+//ErrNotExist not found
+var ErrNotExist = errors.New("Not Exist")
 
-// //ErrBookAlreadyBorrowed cannot borrow
-// var ErrBookAlreadyBorrowed = errors.New("Book already borrowed")
-
-// //ErrBookNotBorrowed cannot return
-// var ErrBookNotBorrowed = errors.New("Book not borrowed")
+//ErrIsEmpty not found
+var ErrIsEmpty = errors.New("is Empty")
