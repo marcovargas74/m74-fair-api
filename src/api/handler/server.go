@@ -2,21 +2,16 @@ package handler
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/infrastructure/logs"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/infrastructure/repository"
-	"github.com/marcovargas74/m74-val-cpf-cnpj/src/usecase/fair"
+	"github.com/marcovargas74/m74-fair-api/src/config"
+	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
+	"github.com/marcovargas74/m74-fair-api/src/infrastructure/repository"
+	"github.com/marcovargas74/m74-fair-api/src/usecase/fair"
 	"github.com/urfave/negroni"
 
 	_ "github.com/go-sql-driver/mysql"
-)
-
-const (
-	serverPort = ":5000"
 )
 
 //ServerAPI is struct to start server
@@ -28,12 +23,52 @@ type ServerAPI struct {
 func (s *ServerAPI) DefaultEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("content-type", "application/json")
-	fmt.Printf("Default data in %v\n", r.URL)
-	log.Printf("METHOD[%s] DefaultEndpoint \n", r.Method)
+	logs.Info("METHOD[%s] DefaultEndpoint \n", r.Method)
 
 	w.WriteHeader(http.StatusAccepted)
 
 }
+
+//NewServerAPIMemory Cria as Rotas Padrão
+func NewServerAPIMemory() *ServerAPI {
+
+	logs.Info("Cria as Rotas e salva dados em Memoria %v", "NewServerAPIMemory")
+	server := new(ServerAPI)
+	routerG := mux.NewRouter()
+	routerG.HandleFunc("/", server.DefaultEndpoint).Methods("GET")
+
+	n := negroni.New(
+		negroni.NewLogger(),
+	)
+
+	fairRepo := fair.NewInmem()
+	fairService := fair.NewService(fairRepo)
+	MakeFairHandlers(routerG, *n, fairService)
+
+	server.Handler = routerG
+	return server
+
+}
+
+//NewServerAPI Cria as Rotas Padrão e TRUE é em Memoria
+func NewServerAPI(mode bool) *ServerAPI {
+	if mode {
+		return NewServerAPIMemory()
+	}
+	return NewServerAPIMYSQL()
+}
+
+//StartAPI http Inicia Servidor que vai prover a API
+func StartAPI(mode bool) {
+	servidor := NewServerAPI(mode)
+
+	logs.Info("Server Started successfully at port-> %v", config.SERVER_API_PORT)
+	if err := http.ListenAndServe(config.SERVER_API_PORT, servidor); err != nil {
+		logs.Error("Fail to conect in port-> %v %v", config.SERVER_API_PORT, err)
+	}
+}
+
+//----------------------------------------------------------------------------------
 
 /*
 //TODO refatorar essa parte
@@ -67,9 +102,9 @@ func exec(db *sql.DB, sql string) sql.Result {
 }
 */
 //NewServerAPI Cria as Rotas Padrão
-func NewServerAPI(mode bool) *ServerAPI {
+func NewServerAPIMYSQL() *ServerAPI {
 
-	logs.Info("Cria as Rotas %v", mode)
+	logs.Info("Cria as Rotas %v", "NewServerAPIMYSQL")
 	server := new(ServerAPI)
 	routerG := mux.NewRouter()
 	routerG.HandleFunc("/", server.DefaultEndpoint).Methods("GET")
@@ -133,14 +168,4 @@ func NewServerAPI(mode bool) *ServerAPI {
 	server.Handler = routerG
 	return server
 
-}
-
-//StartAPI http Inicia Servidor que vai prover a API
-func StartAPI(mode bool) {
-	servidor := NewServerAPI(mode)
-
-	logs.Info("Server Started successfully at port-> %v", serverPort)
-	if err := http.ListenAndServe(serverPort, servidor); err != nil {
-		logs.Error("Fail to conect in port-> %v %v", serverPort, err)
-	}
 }

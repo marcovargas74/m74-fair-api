@@ -1,5 +1,6 @@
 package cpfcnpj
 
+/*
 import (
 	"testing"
 	"time"
@@ -71,3 +72,4 @@ func TestUpTimeStatus(t *testing.T) {
 	lastTime := UptimeQuery()
 	CheckIfUptimeIsOK(t, lastTime, 3)
 }
+*/
