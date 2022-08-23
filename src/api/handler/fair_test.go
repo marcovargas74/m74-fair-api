@@ -105,7 +105,7 @@ func TestCreateFairFail(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
 
-			request := entity.NewReqEndpointsPOST("/fair", tt.inData)
+			request := entity.NewReqEndpointsPOST("/fairs", tt.inData)
 			answer := httptest.NewRecorder()
 
 			server.ServeHTTP(answer, request)
@@ -133,7 +133,45 @@ func TestCreateFair(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
 
-			request := entity.NewReqEndpointsBodyPOST("/fair", tt.inData, tt.inData)
+			request := entity.NewReqEndpointsBodyPOST("/fairs", tt.inData, tt.inData)
+			answer := httptest.NewRecorder()
+
+			server.ServeHTTP(answer, request)
+			assert.Equal(t, answer.Code, tt.wantValue)
+		})
+
+	}
+}
+
+func TestCreateUpdateFail(t *testing.T) {
+
+	tests := []struct {
+		give      string
+		wantValue int
+		inData    string
+	}{
+		{
+			give:      "Fair Endpoint test with empty char",
+			wantValue: 404,
+			inData:    "",
+		},
+		{
+			give:      "Fair Endpoint test with iNVALID id",
+			wantValue: 400,
+			inData:    "123",
+		},
+		{
+			give:      "Fair Endpoint test with iNVALID id",
+			wantValue: 404,
+			inData:    "4f45e8f1-c75d-4330-ba7b-58c691d61104",
+		},
+	}
+
+	server := NewServerAPIMemory()
+	for _, tt := range tests {
+		t.Run(tt.give, func(t *testing.T) {
+
+			request := entity.NewReqEndpointsPUT("/fairs", tt.inData)
 			answer := httptest.NewRecorder()
 
 			server.ServeHTTP(answer, request)
