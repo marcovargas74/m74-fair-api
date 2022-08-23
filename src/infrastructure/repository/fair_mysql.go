@@ -114,22 +114,54 @@ func (r *FairMySQL) Get(id entity.ID) (*entity.Fair, error) {
 //Update a Fair
 func (r *FairMySQL) Update(e *entity.Fair) error {
 	e.UpdatedAt = time.Now()
-	_, err := r.db.Exec("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?", e.Name, e.District, e.Region5, e.Neighborhood, e.UpdatedAt.Format("2006-01-02"), e.ID)
+
+	db, err := sql.Open("mysql", AddrDB)
 	if err != nil {
-		//TODO colocar log de erro
+		log.Println(err)
 		return err
 	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Println(err)
+	}
+
+	//_, err := r.db.Exec("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?", e.Name, e.District, e.Region5, e.Neighborhood, e.UpdatedAt.Format("2006-01-02"), e.ID)
+	stmt, err := tx.Prepare("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?")
+	if err != nil {
+		log.Println(err)
+	}
+
+	_, err = stmt.Exec(e.Name, e.District, e.Region5, e.Neighborhood, e.UpdatedAt.Format("2006-01-02"), e.ID)
+	if err != nil {
+		tx.Rollback()
+		log.Println(err)
+		return err
+	}
+
+	if err != nil {
+		tx.Rollback()
+		log.Println(err)
+		return err
+	}
+
+	tx.Commit()
+
 	return nil
+
 }
 
 //Search fairs
 func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
-	stmt, err := r.db.Prepare(`select id, name, district, region5, neighborhood, created_at from fair where name like ?`)
+	stmt, err := r.db.Prepare(`select id, name, district, region5, neighborhood, created_at from fair where ? like ?`)
 	if err != nil {
 		return nil, err
 	}
 	var fairs []*entity.Fair
-	rows, err := stmt.Query("%" + value + "%")
+	rows, err := stmt.Query(key, "%"+value+"%")
+	//rows, err := stmt.Exec(key, value)
+
 	if err != nil {
 		return nil, err
 	}
