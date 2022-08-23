@@ -8,10 +8,13 @@ var ErrNotFound = errors.New("ERR: Not found")
 //ErrInvalidEntity invalid entity
 var ErrInvalidEntity = errors.New("ERR: Invalid entity")
 
+//ErrCannotBeCreated cannot be Created
+var ErrCannotBeCreated = errors.New("ERR: Cannot Be Created")
+
 //ErrCannotBeDeleted cannot be deleted
 var ErrCannotBeDeleted = errors.New("ERR: Cannot Be Deleted")
 
-//ErrCannotBeUpdated cannot be deleted
+//ErrCannotBeUpdated cannot be Updated
 var ErrCannotBeUpdated = errors.New("ERR: Cannot Be Updated")
 
 //ErrNotExist not found
