@@ -1,7 +1,9 @@
 package presenter
 
 import (
-	"github.com/eminetto/clean-architecture-go-v2/entity"
+	"encoding/json"
+
+	"github.com/marcovargas74/m74-fair-api/src/entity"
 )
 
 //Fair data
@@ -13,10 +15,39 @@ type Fair struct {
 	Neighborhood string    `json:"neighborhood"`
 }
 
-//Validate validate book
+//NewCreateFairPresenter .
+func NewCreateFairPresenter(e *entity.Fair) Fair {
+	return Fair{
+		ID:           e.ID,
+		Name:         e.Name,
+		District:     e.District,
+		Region5:      e.Region5,
+		Neighborhood: e.Neighborhood,
+	}
+}
+
+//NewCreateFairPresenterJSON .
+func NewCreateFairPresenterJSON(e *entity.Fair) ([]byte, error) {
+
+	toJSON := NewCreateFairPresenter(e)
+	return json.Marshal(toJSON)
+}
+
+//Validate validate presenter
 func (f *Fair) Validate() error {
 	if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
 		return entity.ErrInvalidEntity
 	}
 	return nil
+}
+
+//ConvertToFairPresenter presenter
+func (f *Fair) ConvertToFairPresenter(e *entity.Fair) Fair {
+	return Fair{
+		ID:           e.ID,
+		Name:         e.Name,
+		District:     e.District,
+		Region5:      e.Region5,
+		Neighborhood: e.Neighborhood,
+	}
 }

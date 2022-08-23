@@ -83,17 +83,12 @@ func listFairs(service fair.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Fair
+		var toJSONList []*presenter.Fair
 		for _, d := range data {
-			toJ = append(toJ, &presenter.Fair{
-				ID:           d.ID,
-				Name:         d.Name,
-				District:     d.District,
-				Region5:      d.Region5,
-				Neighborhood: d.Neighborhood,
-			})
+			toJSON := presenter.NewCreateFairPresenter(d)
+			toJSONList = append(toJSONList, &toJSON)
 		}
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		if err := json.NewEncoder(w).Encode(toJSONList); err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
 			logs.Error("listFairs()Falha ao converter o dado pra JSON %s", err.Error())
@@ -173,7 +168,7 @@ func getFair(service fair.UseCase) http.Handler {
 			return
 		}
 
-		json, err := json.Marshal(data)
+		json, err := presenter.NewCreateFairPresenterJSON(data)
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
@@ -183,21 +178,6 @@ func getFair(service fair.UseCase) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(w, string(json))
 		w.WriteHeader(http.StatusOK)
-		/*
-			toJSON := &presenter.Fair{
-				ID:           data.ID,
-				Name:         data.Name,
-				District:     data.District,
-				Region5:      data.Region5,
-				Neighborhood: data.Neighborhood,
-			}
-
-			if err := json.NewEncoder(w).Encode(toJSON); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(errorMessage))
-			}
-		*/
-
 	})
 }
 
@@ -287,7 +267,7 @@ func updateFair(service fair.UseCase) http.Handler {
 			return
 		}
 
-		json, err := json.Marshal(dataToUpdate)
+		json, err := presenter.NewCreateFairPresenterJSON(dataToUpdate)
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
