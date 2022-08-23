@@ -177,6 +177,99 @@ func getFair(service fair.UseCase) http.Handler {
 	})
 }
 
+func updateFair(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//errorMessage := "Error reading fair"
+		vars := mux.Vars(r)
+		id, err := entity.StringToID(vars["id"])
+		//logs.Debug("UPDATE Fair id [%v] \n", id)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprint(w, entity.ErrInvalidID.Error())
+			logs.Error("ERRO: [%s] Nao conseguiu Converte o ID %v \n", entity.ErrInvalidID.Error(), id)
+			return
+		}
+
+		dataToUpdate, err := service.GetFair(id)
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, err.Error())
+			logs.Error("ERRO: [%s] DESCONHECIDO ID %v \n", err.Error(), id)
+			return
+		}
+
+		if dataToUpdate == nil {
+			w.WriteHeader(http.StatusNotFound)
+			fmt.Fprint(w, entity.ErrNotFound.Error())
+			logs.Error("ERRO: [%s] Nao achou o ID %v \n", entity.ErrInvalidID.Error(), id)
+			return
+		}
+
+		//------Recuperar os dados Passados no Endpoint
+		var newData presenter.Fair
+		err = json.NewDecoder(r.Body).Decode(&newData)
+		if err != nil {
+			w.WriteHeader(http.StatusNotAcceptable)
+			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
+			logs.Error("updateFair()Falha ao recuparar os dados passado no endpoint %s \n", err.Error())
+			return
+		}
+		defer r.Body.Close()
+
+		//Se for PUT todos os dados tem que estar aqui
+		err = newData.Validate()
+		if r.Method == http.MethodPut && err != nil {
+			w.WriteHeader(http.StatusExpectationFailed)
+			fmt.Fprint(w, entity.ErrInvalidEntity.Error())
+			logs.Error("Parametro(s) invalido(s) %s \n", err.Error())
+			return
+		}
+
+		// ----atualiza os valores retornados .. TODO criar uma funcao auxiliar pra isso
+		if newData.Name != "" {
+			dataToUpdate.Name = newData.Name
+		}
+
+		if newData.District != "" {
+			dataToUpdate.District = newData.District
+		}
+
+		if newData.Region5 != "" {
+			dataToUpdate.Region5 = newData.Region5
+		}
+
+		if newData.Neighborhood != "" {
+			dataToUpdate.Neighborhood = newData.Neighborhood
+		}
+
+		//---------Atualiza os dados no Banco
+		if err = dataToUpdate.Validate(); err != nil {
+			w.WriteHeader(http.StatusExpectationFailed)
+			fmt.Fprint(w, entity.ErrInvalidEntity.Error())
+			logs.Error("Parametro(s) invalido(s) %s", err.Error())
+			return
+		}
+
+		if err = service.UpdateFair(dataToUpdate); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, entity.ErrCannotBeUpdated.Error())
+			logs.Error("updateFair()Falha ao atualizar dados %s", err.Error())
+			return
+		}
+
+		json, err := json.Marshal(dataToUpdate)
+		if err != nil {
+			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
+			logs.Error("updateFair()Falha ao converter o dado pra JSON %s", err.Error())
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, string(json))
+		w.WriteHeader(http.StatusOK)
+	})
+}
+
 func deleteFair(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error removing Fair"
@@ -236,11 +329,13 @@ func CallbackFairDelete(w http.ResponseWriter, r *http.Request) {
 //NewServerAPI Create Server
 func MakeFairHandlers(r *mux.Router, n negroni.Negroni, service fair.UseCase) {
 
-	r.Handle("/fair", n.With(negroni.Wrap(listFairs(service)))).Methods("GET", "OPTIONS").Name("listFairs")
-	r.Handle("/fair", n.With(negroni.Wrap(createFair(service)))).Methods("POST", "OPTIONS").Name("createFair")
+	r.Handle("/fairs", n.With(negroni.Wrap(listFairs(service)))).Methods("GET", "OPTIONS").Name("listFairs")
+	r.Handle("/fairs", n.With(negroni.Wrap(createFair(service)))).Methods("POST", "OPTIONS").Name("createFair")
 
-	r.Handle("/fair/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET", "OPTIONS").Name("getFair")
-	r.Handle("/fair/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE", "OPTIONS").Name("deleteFair")
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET", "OPTIONS").Name("getFair")
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE", "OPTIONS").Name("deleteFair")
+
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(updateFair(service)))).Methods("PUT", "PATCH", "OPTIONS").Name("updateFair")
 
 	/*
 		func MakeBookHandlers(r *mux.Router, n negroni.Negroni, service book.UseCase) {
