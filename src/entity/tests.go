@@ -84,6 +84,17 @@ func NewReqEndpointsPOST(urlPrefix, urlName string) *http.Request {
 	return request
 }
 
+//NewReqEndpointsPUT Genetic PUT endpoint to test
+func NewReqEndpointsPUT(urlPrefix, urlName string) *http.Request {
+	request, error := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/%s", urlPrefix, urlName), nil)
+	if error != nil {
+		panic(error)
+	}
+
+	request.Header.Set("User-Agent", UserAgentTest)
+	return request
+}
+
 //NewReqEndpointsBodyPOST Genetic POST endpoint to test
 func NewReqEndpointsBodyPOST(urlPrefix, urlName string, json string) *http.Request {
 
