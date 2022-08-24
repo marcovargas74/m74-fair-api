@@ -46,10 +46,36 @@ func (r *inmem) Update(e *entity.Fair) error {
 //Search Fair
 func (r *inmem) Search(key string, value string) ([]*entity.Fair, error) {
 	var d []*entity.Fair
+
 	for _, j := range r.m {
-		if strings.Contains(strings.ToLower(j.Name), value) {
-			d = append(d, j)
+
+		switch {
+		case key == "name":
+			if strings.Contains(strings.ToLower(j.Name), value) {
+				d = append(d, j)
+			}
+
+		case key == "district":
+			if strings.Contains(strings.ToLower(j.District), value) {
+				d = append(d, j)
+			}
+
+		case key == "region5":
+			if strings.Contains(strings.ToLower(j.Region5), value) {
+				d = append(d, j)
+			}
+
+		case key == "neighborhood":
+			if strings.Contains(strings.ToLower(j.Neighborhood), value) {
+				d = append(d, j)
+			}
+
+		default:
+			if strings.Contains(strings.ToLower(j.Name), value) {
+				d = append(d, j)
+			}
 		}
+
 	}
 	return d, nil
 }
