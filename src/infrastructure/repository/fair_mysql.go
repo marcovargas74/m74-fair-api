@@ -23,7 +23,89 @@ type FairMySQL struct {
 }
 
 //TODO trazer a criacao do banco pra ca
+const (
+	//DBSourceOpenLocal Const used to Open Local db
+	DBSourceOpenLocal = "root:my-secret-pw@tcp(localhost:3307)/"
 
+	//DBSourceLocal Const used to acces Local db
+	DBSourceLocal = "root:my-secret-pw@tcp(localhost:3307)/fairAPI?parseTime=true"
+
+	//DBSourceOpenDocker Const used to Open Docker db
+	//DBSourceOpenDocker = "root:my-secret-pw@tcp(mysql-api)/" //mysql-api é o nome do serviço no docker-composer
+
+	//DBSourceDocker Const used to acces Docker db
+	//DBSourceDocker = "root:my-secret-pw@tcp(mysql-api)/fairAPI"
+
+)
+
+func exec(db *sql.DB, sql string) sql.Result {
+	result, err := db.Exec(sql)
+	if err != nil {
+		log.Print(err)
+	}
+	return result
+}
+
+func CreateDB() {
+	//--------------SE CONECTA AO BANCO
+	//dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:3307)/%s?parseTime=true", config.DB_USER, config.DB_PASSWORD, config.DB_HOST, config.DB_DATABASE)
+	//db, err := sql.Open("mysql", dataSourceName)
+
+	//AddrOpenDB = DBSourceOpenDocker
+	//AddrDB = DBSourceDocker
+	AddrOpenDB = DBSourceOpenLocal
+	AddrDB = DBSourceLocal
+
+	db, err := sql.Open("mysql", AddrOpenDB)
+	if err != nil {
+		logs.Error("FALHA ao conectar ao Banco Mysql do DOcker %v", err)
+		/*AddrOpenDB = DBSourceOpenLocal
+		AddrDB = DBSourceLocal
+		db, err = sql.Open("mysql", AddrOpenDB)
+		if err != nil {
+			logs.Error("FALHA ao conectar ao Banco Mysql Local IP 127.0.0.1 %v", err)
+		}*/
+	}
+	defer db.Close()
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+
+	time.Sleep(5 * time.Second)
+	//--------------------------------------------------------------
+	fmt.Println("Conectado ao Banco")
+	exec(db, "create database if not exists fairAPI")
+	exec(db, "use fairAPI")
+	//if isDropTable {
+	//exec(db, "drop table if exists fair")
+	//}
+
+	exec(db, `create table IF NOT EXISTS fair(
+		   	idx integer auto_increment,
+		   	id varchar(50) ,
+		   	name varchar(50),
+		   	district varchar(18),
+		   	region5 varchar(6),
+		   	neighborhood varchar(20),
+			created_at datetime,
+		   	updated_at datetime,
+		   	PRIMARY KEY (idx)
+		   	)`)
+
+	//var db *sql.DB
+	//repository.CreateDB()
+	//db, err := sql.Open("mysql", repository.AddrOpenDB)
+
+	/*db.Close()
+	db, err = sql.Open("mysql", repository.AddrDB)
+	if err != nil {
+		log.Println(err)
+		//return nil, err
+	}*/
+
+}
+
+/*
 func startDB() (*sql.Tx, error) {
 
 	db, err := sql.Open("mysql", AddrDB)
@@ -41,7 +123,26 @@ func startDB() (*sql.Tx, error) {
 	}
 
 	return tx, nil
+}*/
+
+//OpenMysql create new repository
+func OpenMysql() *sql.DB {
+
+	db, err := sql.Open("mysql", AddrDB)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	return db
 }
+
+//NewFairMySQL create new repository
+/*func NewFairMySQL() *FairMySQL {
+	return &FairMySQL{
+		db: openMysql(),
+	}
+}*/
 
 //NewFairMySQL create new repository
 func NewFairMySQL(db *sql.DB) *FairMySQL {
@@ -52,11 +153,30 @@ func NewFairMySQL(db *sql.DB) *FairMySQL {
 	}
 }
 
+func (r *FairMySQL) beginMysql() (*sql.Tx, error) {
+
+	/*db, err := sql.Open("mysql", AddrDB)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer db.Close()*/
+
+	tx, err := r.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+
+	}
+
+	return tx, nil
+}
+
 //Create a Fair TODO tratar erros
 func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 
 	//TODO REFATORAR - separae em uma funcao
-	tx, err := startDB()
+	tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
 		return e.ID, err
@@ -69,6 +189,7 @@ func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 	// 	values(?,?,?,?,?,?)`)
 
 	stmt, err := tx.Prepare("insert into fair (id, name, district, region5, neighborhood, created_at)values(?,?,?,?,?,?)")
+	//stmt, err := r.db.Prepare("insert into fair (id, name, district, region5, neighborhood, created_at)values(?,?,?,?,?,?)")
 	if err != nil {
 		logs.Error("Err [%s] Insert DATA in Mysql ", err.Error())
 		return e.ID, err
@@ -100,7 +221,7 @@ func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 //Get a Fair
 func (r *FairMySQL) Get(id entity.ID) (*entity.Fair, error) {
 
-	tx, err := startDB()
+	tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -139,7 +260,7 @@ func (r *FairMySQL) Get(id entity.ID) (*entity.Fair, error) {
 func (r *FairMySQL) Update(e *entity.Fair) error {
 	e.UpdatedAt = time.Now()
 
-	tx, err := startDB()
+	tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -179,14 +300,14 @@ func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 
 	logs.Debug("Search MySQL key[%s]value[%s] GET BD \n", key, value)
 
-	tx, err := startDB()
+	/*tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
 		return nil, err
-	}
+	}*/
 
 	busca := fmt.Sprintf("select id, name, district, region5, neighborhood, created_at from fair where %s like ?", key)
-	stmt, err := tx.Prepare(busca)
+	stmt, err := r.db.Prepare(busca)
 
 	if err != nil {
 		logs.Error("Err [%s] Prepare DATA in Mysql ", err.Error())
@@ -221,14 +342,14 @@ func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 //List Fairs
 func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
-	db, err := sql.Open("mysql", AddrDB)
+	/*db, err := sql.Open("mysql", AddrDB)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	defer db.Close()
+	defer db.Close()*/
 
-	logs.Debug("MySQL LIST BD %s \n", AddrDB)
+	//logs.Debug("MySQL LIST BD %s \n", AddrDB)
 
 	// tx, err := db.Begin()
 	// if err != nil {
@@ -240,7 +361,8 @@ func (r *FairMySQL) List() ([]*entity.Fair, error) {
 	//stmt, err := tx.Prepare(`select id, name, district, region5, neighborhood, created_at from fair`)
 	//stmt, err := r.db.Prepare(`select id, name, district, region5, neighborhood, created_at from fair`)
 
-	rows, err := db.Query("select id, name, district, region5, neighborhood, created_at from fair")
+	//OK rows, err := db.Query("select id, name, district, region5, neighborhood, created_at from fair")
+	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
 	if err != nil {
 		logs.Error("ERRO: [%s] Nao conseguiu Acessar o DB \n", err.Error())
 		return nil, err
@@ -257,7 +379,6 @@ func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
 	for rows.Next() {
 		var fair entity.Fair
-		//err = rows.Scan(&f.ID, &f.Name, &f.District, &f.Region5, &f.Neighborhood, &f.CreatedAt)
 		err = rows.Scan(&fair.ID, &fair.Name, &fair.District, &fair.Region5, &fair.Neighborhood, &fair.CreatedAt)
 		if err != nil {
 			logs.Error("   ERRO!!!: [%s] Nao conseguiu Acessar a tabelaDB \n", err.Error())
@@ -270,9 +391,6 @@ func (r *FairMySQL) List() ([]*entity.Fair, error) {
 	logs.Debug("List MySQL %s len %d \n", "scan", len(fairs))
 
 	if len(fairs) == 0 {
-		//errEmpty := errors.New("FAIR_TABLE: is Empty")
-		// fmt.Fprint(w, entity.ErrInvalidID.Error())
-		// logs.Error("ERRO: [%s] Nao conseguiu Converte o ID %v \n", entity.ErrInvalidID.Error(), id)
 		logs.Warn("WARNING: [%s]  %v \n", entity.ErrEmptyDB.Error(), len(fairs))
 		return nil, entity.ErrEmptyDB
 	}
@@ -284,7 +402,7 @@ func (r *FairMySQL) List() ([]*entity.Fair, error) {
 //Delete a Fair
 func (r *FairMySQL) Delete(id entity.ID) error {
 
-	tx, err := startDB()
+	tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -311,96 +429,5 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 
 	tx.Commit()
 
-	// _, err := tx.Exec("delete from fair where id = ?", id)
-	// //_, err := r.db.Exec("delete from fair where id = ?", id)
-	// if err != nil {
-	// 	return err
-	// }
 	return nil
 }
-
-/*
-
-
-
-const (
-	//DBSourceOpenLocal Const used to Open Local db
-	DBSourceOpenLocal = "root:my-secret-pw@tcp(localhost:3307)/"
-
-	//DBSourceLocal Const used to acces Local db
-	DBSourceLocal = "root:my-secret-pw@tcp(localhost:3307)/validatorAPP" //root:Mysql#my-secret-pw@/validatorAPP"
-
-	//DBSourceOpenDocker Const used to Open Docker db
-	DBSourceOpenDocker = "root:my-secret-pw@tcp(mysql-api)/" //mysql-api é o nome do serviço no docker-composer
-
-	//DBSourceDocker Const used to acces Docker db
-	DBSourceDocker = "root:my-secret-pw@tcp(mysql-api)/validatorAPP" //root:Mysql#my-secret-pw@/validatorAPP"
-
-	//DBisDropTableSQL Clear TAbles
-	DBisDropTableSQL = false
-)
-
-//AddrOpenDB VAR used to open and to access BD
-var AddrOpenDB string
-
-//AddrDB VAR data source name
-var AddrDB string
-
-func exec(db *sql.DB, sql string) sql.Result {
-	result, err := db.Exec(sql)
-	if err != nil {
-		log.Print(err)
-	}
-	return result
-}
-
-
-//InitDBSQL Connect To SQL Database
-func InitDBSQL(isDropTable bool) {
-
-	AddrOpenDB = DBSourceOpenDocker
-	AddrDB = DBSourceDocker
-
-	db, err := sql.Open("mysql", AddrOpenDB)
-	if err != nil {
-		log.Printf("Failed to connect to db Local Mysql...")
-		AddrOpenDB = DBSourceOpenLocal
-		AddrDB = DBSourceLocal
-		db, err = sql.Open("mysql", AddrOpenDB)
-		if err != nil {
-			log.Printf("Failed to connect to db Local Mysql IP 127.0.0.1")
-			log.Print(err)
-		}
-
-	}
-
-	defer db.Close()
-
-	fmt.Println("Successfully connected to the DB")
-	exec(db, "create database if not exists validatorAPP")
-	exec(db, "use validatorAPP")
-	if isDropTable {
-		exec(db, "drop table if exists querys")
-	}
-
-	exec(db, `create table IF NOT EXISTS querys(
-	idx integer auto_increment,
-	id varchar(40) ,
-	number varchar(18),
-	is_valid boolean,
-	is_cpf boolean,
-	is_cnpj boolean,
-    createAt datetime,
-	PRIMARY KEY (idx)
-	)`)
-
-	fmt.Println("Successfully connected to the DB!")
-
-}
-
-
-//CreateDB Create SQL dataBase
-func CreateDB() {
-	InitDBSQL(DBisDropTableSQL)
-}
-*/
