@@ -12,7 +12,7 @@ services:
     ports:
       - "3307:3306"
 
-  my-validate-api:    
+  my-fair-api:    
     image: m74fairapi:latest 
     container_name: m74fairapi 
     environment: 

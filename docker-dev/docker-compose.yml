@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+
+  mysql-api:
+    image: mysql:8.0.28
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: godockerDB
+    environment:
+      MYSQL_URL : root:my-secret-pw@tcp(localhost:3307)/
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: fairAPI
+      MYSQL_DB_PORT: 3037
+    ports:
+      - "3307:3306"
+
+  
