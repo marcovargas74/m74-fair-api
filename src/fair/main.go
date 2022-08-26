@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	//"github.com/marcovargas74/m74-val-cpf-cnpj/src/api/handler"
 	"github.com/marcovargas74/m74-fair-api/src/api/handler"
@@ -27,8 +28,14 @@ func init() {
 
 func main() {
 
-	logs.Debug("======== SAVE IN MEMORY API FAIR Version %s DEV:%v\n", config.VERSION_PACKAGE, *DevEnabled)
-	handler.StartAPI(*DevEnabled)
+	logs.Debug("======== SAVE API FAIR Version %s DEV:%v\n", config.VERSION_PACKAGE, *DevEnabled)
+	config.SetEngGet()
+	go handler.StartAPI_MySQL(config.SERVER_API_PORT_SQL)
+
+	go handler.StartAPI_Memory(config.SERVER_API_PORT_MEM)
+
+	var input string
+	fmt.Scanln(&input)
 	logs.LoggerClose()
 
 }
