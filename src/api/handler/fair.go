@@ -103,7 +103,10 @@ func listFairs(service fair.UseCase) http.Handler {
 			logs.Debug("service.SearchFairs(key, value) key[%s] value[%s] ", key, value)
 		}
 
-		if err = handlerSearchError(w, data[0], err); err != nil {
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, err.Error())
+			logs.Error("ERRO: [%s] DESCONHECIDO \n", err.Error())
 			return
 		}
 
@@ -176,6 +179,8 @@ func getFair(service fair.UseCase) http.Handler {
 			return
 		}
 
+		logs.Debug("getFair()ID %s", id)
+
 		data, err := service.GetFair(id)
 		if err = handlerSearchError(w, data, err); err != nil {
 			return
@@ -223,7 +228,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		}
 		if err = service.UpdateFair(dataToUpdate); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprint(w, entity.ErrCannotBeUpdated.Error())
+			fmt.Fprint(w, err.Error())
 			logs.Error("updateFair()Falha ao atualizar dados %s", err.Error())
 			return
 		}
