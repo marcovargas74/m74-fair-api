@@ -5,6 +5,9 @@ import "errors"
 //ErrNotFound not found
 var ErrNotFound = errors.New("ERR: Not found")
 
+//ErrEmptyDB Empty DB or List
+var ErrEmptyDB = errors.New("ERR: Empty DB")
+
 //ErrInvalidEntity invalid entity
 var ErrInvalidEntity = errors.New("ERR: Invalid entity")
 
