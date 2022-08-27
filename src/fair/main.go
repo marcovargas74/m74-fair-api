@@ -10,9 +10,6 @@ import (
 	logs "github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
-//DevEnabled enable version development
-//var DevEnabled *bool
-
 //LogInFile write log to file
 var LogInFile *bool
 
