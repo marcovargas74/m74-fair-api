@@ -87,24 +87,28 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 		wantTypeApp string
 		wantPortMem string
 		wantPortSQL string
+		wantLogFile string
 	}{
 		{
 			give:        "Config General Default VALUES",
 			wantTypeApp: TYPE_PROD,
-			wantPortMem: ":6000",
-			wantPortSQL: ":6001",
+			wantPortMem: ":5000",
+			wantPortSQL: ":5001",
+			wantLogFile: "./fairAPI.log",
 		},
 		{
 			give:        "Config General DEV VALUES",
 			wantTypeApp: TYPE_DEV,
 			wantPortMem: ":6000",
 			wantPortSQL: ":6001",
+			wantLogFile: "",
 		},
 		{
 			give:        "Config General TESTs VALUES",
 			wantTypeApp: TYPE_TEST,
 			wantPortMem: ":0000",
 			wantPortSQL: ":0001",
+			wantLogFile: "./test.txt",
 		},
 	}
 
@@ -113,17 +117,19 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			os.Setenv(_TYPE_APP, tt.wantTypeApp)
 			os.Setenv(_SERVER_API_PORT_MEM, tt.wantPortMem)
 			os.Setenv(_SERVER_API_PORT_SQL, tt.wantPortSQL)
+			os.Setenv(_LOG_FILE, tt.wantLogFile)
 
 			tc, _ := ConfigGetAPIGeneral()
 			fmt.Printf("  TestConfigGetAPIGeneral()..isProd[%s]portM[%s]portDB[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL)
 			assert.Equal(t, tc.APITypeApp, tt.wantTypeApp)
 			assert.Equal(t, tc.APIServerPortMem, tt.wantPortMem)
 			assert.Equal(t, tc.APIServerPortSQL, tt.wantPortSQL)
-
+			assert.Equal(t, tc.APILogFile, tt.wantLogFile)
 		})
 		os.Unsetenv(_TYPE_APP)
 		os.Unsetenv(_SERVER_API_PORT_MEM)
 		os.Unsetenv(_SERVER_API_PORT_SQL)
+		os.Unsetenv(_LOG_FILE)
 	}
 
 }
@@ -131,14 +137,15 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 func TestConfigAPIGeneralDefault(t *testing.T) {
 	var want ConfigAPI
 	want.APITypeApp = TYPE_PROD
-	want.APIServerPortMem = ":5000"
-	want.APIServerPortSQL = ":5001"
+	want.APIServerPortMem = DEFAULT_SERVER_API_PORT_MEM
+	want.APIServerPortSQL = DEFAULT_SERVER_API_PORT_SQL
+	want.APILogFile = DEFAULT_LOG_FILE
 
 	os.Clearenv()
 	tc, _ := ConfigGetAPIGeneral()
-	logs.Debug("  TestConfigAPIGeneralDefault()..isProd[%s]portM[%s]portDB[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL)
+	logs.Debug("  TestConfigAPIGeneralDefault()..isProd[%s]portM[%s]portDB[%s]fLog[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL, tc.APILogFile)
 	assert.Equal(t, tc.APITypeApp, want.APITypeApp)
 	assert.Equal(t, tc.APIServerPortMem, want.APIServerPortMem)
 	assert.Equal(t, tc.APIServerPortSQL, want.APIServerPortSQL)
-
+	assert.Equal(t, tc.APILogFile, want.APILogFile)
 }
