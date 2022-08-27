@@ -68,8 +68,6 @@ func StartAPI_MySQL(portToAcessAPI string) {
 	}
 }
 
-//----------------------------------------------------------------------------------
-
 //NewServerAPIMYSQL Cria as Rotas Padrão
 func NewServerAPIMYSQL() *ServerAPI {
 
