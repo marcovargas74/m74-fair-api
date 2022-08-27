@@ -20,7 +20,7 @@ const (
 		district varchar(18),
 		region5 varchar(6),
 		neighborhood varchar(20),
-	 created_at datetime,
+	    created_at datetime,
 		updated_at datetime,
 		PRIMARY KEY (idx)
 		)`
@@ -39,44 +39,27 @@ func NewFairMySQL(db *sql.DB) *FairMySQL {
 }
 
 func (r *FairMySQL) beginMysql() (*sql.Tx, error) {
-
-	/*db, err := sql.Open("mysql", AddrDB)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer db.Close()*/
-
 	tx, err := r.db.Begin()
 	if err != nil {
-		log.Println(err)
+		logs.Error("beginMysql() Err [%s]", err.Error())
 		return nil, err
 
 	}
-
 	return tx, nil
 }
 
-//Create a Fair TODO tratar erros
+//Create Save fair data in DB
 func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 
-	//TODO REFATORAR - separae em uma funcao
 	tx, err := r.beginMysql()
 	if err != nil {
-		log.Println(err)
+		logs.Error("Create(*entity.Fair) Err [%s] Could not access the DB ", err.Error())
 		return e.ID, err
 	}
 
-	//logs.Debug("MySQL CREATE BD %s \n", AddrDB)
-
-	// stmt, err := r.db.Prepare(`
-	// 	insert into fair (id, name, district, region5, neighborhood, created_at)
-	// 	values(?,?,?,?,?,?)`)
-
 	stmt, err := tx.Prepare("insert into fair (id, name, district, region5, neighborhood, created_at)values(?,?,?,?,?,?)")
-	//stmt, err := r.db.Prepare("insert into fair (id, name, district, region5, neighborhood, created_at)values(?,?,?,?,?,?)")
 	if err != nil {
-		logs.Error("Err [%s] Insert DATA in Mysql ", err.Error())
+		logs.Error("Create(*entity.Fair) Err [%s] Could not prepare transaction on DB ", err.Error())
 		return e.ID, err
 	}
 
@@ -90,91 +73,77 @@ func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 	)
 	if err != nil {
 		tx.Rollback()
-		logs.Error("exec in Mysql %v \n", err)
+		logs.Error("Create(*entity.Fair) Err [%s] Could not execute transaction on DB ", err.Error())
 		return e.ID, err
 	}
 	tx.Commit()
 
-	err = stmt.Close()
-	if err != nil {
-		logs.Error("Close stmt in Mysql %v \n", err)
-		return e.ID, err
-	}
+	defer stmt.Close()
 	return e.ID, nil
 }
 
-//Get a Fair
+//Get a Fair data from DB by ID
 func (r *FairMySQL) Get(id entity.ID) (*entity.Fair, error) {
 
 	tx, err := r.beginMysql()
 	if err != nil {
 		log.Println(err)
+		logs.Error("Get(entity.ID) Err [%s] Could not access the DB ", err.Error())
 		return nil, err
 	}
 
-	logs.Debug("getFair(2.MYSQL)ID %s", id)
+	logs.Debug("Get(ID: %s)", id)
 
 	stmt, err := tx.Prepare("select id, name, district, region5, neighborhood, created_at from fair where id = ?")
-	//stmt, err := r.db.Prepare(`id, name, district, region5, neighborhood, created_at from fair where id = ?`)
 	if err != nil {
-		logs.Error("Err [%s] Prepare DATA in Mysql ", err.Error())
+		logs.Error("Get(entity.ID) Err [%s] Could not prepare transaction on DB ", err.Error())
 		return nil, err
 	}
-
-	logs.Debug("MySQL 00 GET BD %v \n", id)
 
 	var fair entity.Fair
 	rows, err := stmt.Query(id)
 	if err != nil {
-		logs.Debug("MySQL  11 GET BD %v \n", id)
+		logs.Error("Create(ID: %s) Err [%s] Could not execute a Query on DB ", id, err.Error())
 		return nil, err
 	}
 
-	logs.Debug("MySQL GET 22 BD %v \n", id)
-
 	for rows.Next() {
 		err = rows.Scan(&fair.ID, &fair.Name, &fair.District, &fair.Region5, &fair.Neighborhood, &fair.CreatedAt)
+		if err != nil {
+			logs.Warn("Create(ID: %s) Err [%s] Could not \"SCAN\" on DB ", id, err.Error())
+		}
 	}
-
-	logs.Debug("MySQL 333 GET BD %v \n", id)
+	defer stmt.Close()
 
 	return &fair, err
 }
 
-//Update a Fair
+//Update Update fair data in DB
 func (r *FairMySQL) Update(e *entity.Fair) error {
 	e.UpdatedAt = time.Now()
 
 	tx, err := r.beginMysql()
 	if err != nil {
-		log.Println(err)
+		logs.Error("Update(*entity.Fair) Err [%s] Could not access the DB ", err.Error())
 		return err
 	}
 
-	//_, err := r.db.Exec("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?", e.Name, e.District, e.Region5, e.Neighborhood, e.UpdatedAt.Format("2006-01-02"), e.ID)
 	stmt, err := tx.Prepare("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?")
 	if err != nil {
-		log.Println(err)
+		logs.Error("Update(*entity.Fair) Err [%s] Could not prepare transaction on DB ", err.Error())
 		return err
 	}
 
-	logs.Debug("MySQL UPDATE 22 BD %v \n", e.ID)
+	logs.Debug("Update(ID: %v)", e.ID)
 	_, err = stmt.Exec(e.Name, e.District, e.Region5, e.Neighborhood, e.UpdatedAt.Format("2006-01-02"), e.ID)
 	if err != nil {
 		tx.Rollback()
-		log.Println(err)
-		logs.Error("Err [%s] FAilt To Update DATA in Mysql  [%s] ", err.Error(), e.Region5)
+		logs.Error("Update(*entity.Fair) Err [%s] Fail to \"UPDATE\" DATA in DB ID[%s]", err.Error(), e.ID)
 		return err
 	}
 
-	if err != nil {
-		tx.Rollback()
-		log.Println(err)
-		return err
-	}
-
+	defer stmt.Close()
 	tx.Commit()
-	logs.Debug("MySQL UPDATE 2233 BD %v \n", e.ID)
 
 	return nil
 
@@ -183,128 +152,92 @@ func (r *FairMySQL) Update(e *entity.Fair) error {
 //Search fairs
 func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 
-	logs.Debug("Search MySQL key[%s]value[%s] GET BD \n", key, value)
+	logs.Debug("Search(key[%s]value[%s]) IN BD", key, value)
 
-	/*tx, err := r.beginMysql()
+	search_param := fmt.Sprintf("select id, name, district, region5, neighborhood, created_at from fair where %s like ?", key)
+	stmt, err := r.db.Prepare(search_param)
 	if err != nil {
-		log.Println(err)
-		return nil, err
-	}*/
-
-	busca := fmt.Sprintf("select id, name, district, region5, neighborhood, created_at from fair where %s like ?", key)
-	stmt, err := r.db.Prepare(busca)
-
-	if err != nil {
-		logs.Error("Err [%s] Prepare DATA in Mysql ", err.Error())
+		logs.Error("Search(key,value) Err [%s] Could not prepare transaction on DB ", err.Error())
 		return nil, err
 	}
-	var fairs []*entity.Fair
+
+	var listFair []*entity.Fair
 	rows, err := stmt.Query("%" + value + "%")
-
 	if err != nil {
-		logs.Error("Err [%s] QUERY DATA in Mysql ", err.Error())
+		logs.Error("Search(value[%s]) Err [%s] Could not execute a Query on DB ", value, err.Error())
 		return nil, err
 	}
-	for rows.Next() {
-		var f entity.Fair
-		err = rows.Scan(&f.ID, &f.Name, &f.District, &f.Region5, &f.Neighborhood, &f.CreatedAt)
-		if err != nil {
-			logs.Error("Search key[%s]value[%s] 333 GET BD \n", key, value)
-			return nil, err
-		}
-		fairs = append(fairs, &f)
-		logs.Debug("....rows.Next() key[%s]value[%s]\n", f.Name, f.Region5)
-	}
-
-	if len(fairs) == 0 {
-		errEmpty := errors.New("FAIR_TABLE: is Empty")
-		return nil, errEmpty
-	}
-
-	return fairs, nil
-}
-
-//List Fairs
-func (r *FairMySQL) List() ([]*entity.Fair, error) {
-
-	/*db, err := sql.Open("mysql", AddrDB)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer db.Close()*/
-
-	//logs.Debug("MySQL LIST BD %s \n", AddrDB)
-
-	// tx, err := db.Begin()
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-
-	logs.Debug("List MySQL %s \n", "init")
-
-	//stmt, err := tx.Prepare(`select id, name, district, region5, neighborhood, created_at from fair`)
-	//stmt, err := r.db.Prepare(`select id, name, district, region5, neighborhood, created_at from fair`)
-
-	//OK rows, err := db.Query("select id, name, district, region5, neighborhood, created_at from fair")
-	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
-	if err != nil {
-		logs.Error("ERRO: [%s] Nao conseguiu Acessar o DB \n", err.Error())
-		return nil, err
-	}
-	defer rows.Close()
-
-	var fairs []*entity.Fair
-	// rows, err := stmt.Query()
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	logs.Debug("  List MySQL rows-> %v \n", rows)
+	defer stmt.Close()
 
 	for rows.Next() {
 		var fair entity.Fair
 		err = rows.Scan(&fair.ID, &fair.Name, &fair.District, &fair.Region5, &fair.Neighborhood, &fair.CreatedAt)
 		if err != nil {
-			logs.Error("   ERRO!!!: [%s] Nao conseguiu Acessar a tabelaDB \n", err.Error())
+			logs.Warn("Search(key[%s]value[%s]) err[%s] Could not \"SCAN\" on DB ", key, value, err.Error())
 			return nil, err
 		}
-		logs.Debug("a fair %s \n", fair.Name)
-		fairs = append(fairs, &fair)
+
+		listFair = append(listFair, &fair)
 	}
 
-	logs.Debug("List MySQL %s len %d \n", "scan", len(fairs))
-
-	if len(fairs) == 0 {
-		logs.Warn("WARNING: [%s]  %v \n", entity.ErrEmptyDB.Error(), len(fairs))
+	if len(listFair) == 0 {
+		logs.Warn("List() WARNING: [%s] size[%v] \n", entity.ErrEmptyDB.Error(), len(listFair))
 		return nil, entity.ErrEmptyDB
 	}
 
-	logs.Debug("List MySQL %s \n", "OK")
-	return fairs, nil
+	return listFair, nil
 }
 
-//Delete a Fair
-func (r *FairMySQL) Delete(id entity.ID) error {
+//List All Fairs Save in DB
+func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
+	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
+	if err != nil {
+		logs.Error(" List() Err [%s] Could not execute a Query on DB ", err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+
+	var listfair []*entity.Fair
+
+	for rows.Next() {
+		var fair entity.Fair
+		err = rows.Scan(&fair.ID, &fair.Name, &fair.District, &fair.Region5, &fair.Neighborhood, &fair.CreatedAt)
+		if err != nil {
+			logs.Warn("List() err[%s] Could not \"SCAN\" on DB ", err.Error())
+			return nil, err
+		}
+		listfair = append(listfair, &fair)
+	}
+
+	if len(listfair) == 0 {
+		logs.Warn("List() WARNING: [%s] size[%v] \n", entity.ErrEmptyDB.Error(), len(listfair))
+		return nil, entity.ErrEmptyDB
+	}
+
+	return listfair, nil
+}
+
+//Delete a Fair data from DB by ID
+func (r *FairMySQL) Delete(id entity.ID) error {
 	tx, err := r.beginMysql()
 	if err != nil {
-		log.Println(err)
+		logs.Error("Delete(id entity.ID) Err [%s] Could not access the DB ", err.Error())
 		return err
 	}
 
 	stmt, err := tx.Prepare("delete from fair where id = ?")
 	if err != nil {
-		log.Println(err)
+		logs.Error("Delete(id entity.ID) Err [%s] Could not prepare transaction on DB ", err.Error())
 		return err
 	}
 
 	result, err := stmt.Exec(id)
 	if err != nil {
-		tx.Rollback()
-		log.Println(err)
+		logs.Error("Delete(id[%s]) Err [%s] Fail to \"DELETE\" DATA in DB", id, err.Error())
 		return err
 	}
+	defer stmt.Close()
 
 	numElement, err := result.RowsAffected()
 	if numElement == 0 || err != nil {
@@ -313,6 +246,5 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 	}
 
 	tx.Commit()
-
 	return nil
 }
