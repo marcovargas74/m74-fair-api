@@ -88,7 +88,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 
 func listFairs(service fair.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//servercpfcnpj.CreateDB()
+
 		var data []*entity.Fair
 		var err error
 
