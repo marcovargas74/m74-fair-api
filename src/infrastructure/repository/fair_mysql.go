@@ -11,6 +11,21 @@ import (
 	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
+const (
+	//TAB_FAIR_CREATE tabela da referente a entidade
+	TAB_FAIR_CREATE = `create table IF NOT EXISTS fair(
+		idx integer auto_increment,
+		id varchar(50) ,
+		name varchar(50),
+		district varchar(18),
+		region5 varchar(6),
+		neighborhood varchar(20),
+	 created_at datetime,
+		updated_at datetime,
+		PRIMARY KEY (idx)
+		)`
+)
+
 //FairMySQL mysql repo
 type FairMySQL struct {
 	db *sql.DB
@@ -52,7 +67,7 @@ func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 		return e.ID, err
 	}
 
-	logs.Debug("MySQL CREATE BD %s \n", AddrDB)
+	//logs.Debug("MySQL CREATE BD %s \n", AddrDB)
 
 	// stmt, err := r.db.Prepare(`
 	// 	insert into fair (id, name, district, region5, neighborhood, created_at)
