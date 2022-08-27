@@ -32,19 +32,17 @@ func (s *Service) CreateFair(name string, district string, region5 string, neigh
 //GetFair get a Fair
 func (s *Service) GetFair(id entity.ID) (*entity.Fair, error) {
 
-	logs.Debug("getFair(1.SERVICE)ID %s", id)
-	b, err := s.repo.Get(id)
-	if b == nil {
-		logs.Error("getFairERROR(1.SERVICE)ID %s", id)
+	logs.Debug("GetFair(id %s)", id)
+	fair, err := s.repo.Get(id)
+	if fair == nil {
+		logs.Warn("GetFair(id %s) warning:[%s]", id, entity.ErrNotFound.Error())
 		return nil, entity.ErrNotFound
 	}
+
 	if err != nil {
-		logs.Error("getFairERROR(1.SERVICE)ID %s", id)
 		return nil, err
 	}
-
-	logs.Debug("getFair(OK.SERVICE)ID %s", id)
-	return b, nil
+	return fair, nil
 }
 
 //SearchFairs search Fair
@@ -63,13 +61,8 @@ func (s *Service) SearchFairs(key string, value string) ([]*entity.Fair, error) 
 func (s *Service) ListFairs() ([]*entity.Fair, error) {
 	fairs, err := s.repo.List()
 	if err != nil {
-		logs.Error("SEESSSSSER 11111 FALHA ao conectar ao Banco Mysql do DOcker %v", err)
 		return nil, err
 	}
-	/*if len(fairs) == 0 {
-		logs.Error("SEESSSSSER tabale vazia %v", err)
-		return nil, entity.ErrNotFound
-	}*/
 	return fairs, nil
 }
 
