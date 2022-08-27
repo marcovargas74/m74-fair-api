@@ -29,5 +29,11 @@ var ErrIsEmpty = errors.New("ERR: is Empty")
 //ErrCannotConvertJSON Cannot Convert to Json Format
 var ErrCannotConvertJSON = errors.New("JSON: Cannot Convert to Json Format")
 
-//ErrIsEmpty not found
+//ErrInvalidID  Invalid ID
 var ErrInvalidID = errors.New("ID: Invalid")
+
+//ErrInvalidConfig Invalid Config
+var ErrInvalidConfig = errors.New("ERR: Config Invalid")
+
+//WarningDefaultConfig Warning Config Default
+var ErrDefaultConfig = errors.New("ERR: Default Config")
