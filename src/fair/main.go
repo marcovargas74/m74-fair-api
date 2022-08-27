@@ -16,6 +16,9 @@ var DevEnabled *bool
 //LogInFile write log to file
 var LogInFile *bool
 
+//GeneralConfigs  GENERAL Configuration
+var GeneralConfigs config.ConfigAPI
+
 func init() {
 	//myquery.CreateStatus()
 	//myquery.SetUsingMongoDocker(myquery.SetDockerRun)
@@ -24,15 +27,27 @@ func init() {
 	DevEnabled = flag.Bool("dev", true, "use development version")
 	logs.Start(*LogInFile, "./fairAPI.log")
 
+	configs, err := config.ConfigGetAPIGeneral()
+	if err != nil || GeneralConfigs.APIServerPortSQL == "" {
+		logs.Error("Fail to Get Configurations-> %v ", GeneralConfigs)
+	}
+
+	GeneralConfigs = configs
+
 }
 
 func main() {
 
 	logs.Debug("======== SAVE API FAIR Version %s DEV:%v\n", config.VERSION_PACKAGE, *DevEnabled)
-	config.SetEngGet()
-	go handler.StartAPI_MySQL(config.SERVER_API_PORT_SQL)
 
-	go handler.StartAPI_Memory(config.SERVER_API_PORT_MEM)
+	//GeneralConfigs, _ = config.ConfigGetAPIGeneral()
+
+	//config.SetEngGet()
+	logs.Debug("Get Configurations-> [%s] [%s] ", GeneralConfigs.APIServerPortSQL, GeneralConfigs.APIServerPortMem)
+
+	go handler.StartAPI_MySQL(GeneralConfigs.APIServerPortSQL)
+
+	go handler.StartAPI_Memory(GeneralConfigs.APIServerPortMem)
 
 	var input string
 	fmt.Scanln(&input)
