@@ -136,3 +136,23 @@ func NewServerAPIMYSQL() *ServerAPI {
 	return server
 
 }
+
+/*
+
+func ConfigDB(string) {
+
+	//Cria valor padrao..
+	url=bancodedados
+
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?parseTime=true", config.DB_USER, config.DB_PASSWORD, config.DB_HOST, config.DB_DATABASE)
+
+
+	//Le variavel de ambientefmt
+	se existir usa
+	//pega a confuguracao do banco se nao tiver usa a padrao
+	envieValueOfEnvironVar("_DB_URL")
+
+
+	//monta url
+
+}*/
