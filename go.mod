@@ -7,6 +7,7 @@ require (
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
+	github.com/joho/godotenv v1.4.0
 	github.com/magiconair/properties v1.8.6
 	github.com/rs/zerolog v1.27.0
 	github.com/urfave/negroni v1.0.0

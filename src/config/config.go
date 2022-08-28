@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"github.com/marcovargas74/m74-fair-api/src/entity"
 	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
@@ -23,6 +24,7 @@ const (
 	DEFAULT_SERVER_API_PORT_SQL = ":5001"
 
 	DEFAULT_LOG_FILE = "./fairAPI.log"
+	DEFAULT_ENV_FILE = "./env"
 	TYPE_PROD        = "PROD"
 	TYPE_DEV         = "DEV"
 	TYPE_TEST        = "TEST"
@@ -111,7 +113,7 @@ func CreateNewConfigAPI() (ConfigAPI, error) {
 	return config, nil
 }
 
-//Validate validate book
+//Validate validate Configs Vars
 func (c *ConfigAPI) Validate() error {
 	if c.APITypeApp == "" || c.APIServerPortMem == "" || c.APIServerPortSQL == "" || c.APILogFile == "" {
 		return entity.ErrInvalidConfig
@@ -123,6 +125,7 @@ func (c *ConfigAPI) Validate() error {
 	return nil
 }
 
+//NewConfigAPI Load All Configurations Vars used in API
 func NewConfigAPI() (ConfigAPI, error) {
 	config, err := CreateNewConfigAPI()
 	if err != nil {
@@ -197,6 +200,17 @@ func (c *ConfigAPI) IsProdType() bool {
 	return strings.Contains(c.APITypeApp, TYPE_PROD)
 }
 
+//SetModTest Force use test mod
 func (c *ConfigAPI) SetModTest() {
 	c.APITypeApp = TYPE_TEST
+}
+
+//LoadFromFileEnv sets the value of the environment variable from a file (.env)
+func LoadFromFileEnv(file string) error {
+	if file == "" {
+		file = ".env"
+	}
+
+	return godotenv.Load(file)
+
 }

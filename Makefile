@@ -39,4 +39,5 @@ docker-dev-down:
 	@cd docker-dev && docker-compose down	
 
 run:
-	@cd src/fair && go run main.go 
+	@cd src/fair && TYPE_APP=DEV go run main.go 
+

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 
-	//"github.com/marcovargas74/m74-val-cpf-cnpj/src/api/handler"
 	"github.com/marcovargas74/m74-fair-api/src/api/handler"
 	"github.com/marcovargas74/m74-fair-api/src/config"
 	logs "github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
@@ -25,8 +24,17 @@ func init() {
 
 	GeneralConfigs = configs
 
-	GeneralConfigs.SetModTest()
 	logs.Start(GeneralConfigs.IsProdType(), GeneralConfigs.APILogFile)
+
+	err = config.LoadFromFileEnv(config.DEFAULT_ENV_FILE)
+	if !GeneralConfigs.IsProdType() {
+		err = config.LoadFromFileEnv("../../docker/.env")
+	}
+
+	if err != nil {
+		logs.Error("Error[%s]loading .env file", err.Error())
+	}
+	//fmt.Printf("VARIAVEL port[%s] LIDO DO ARQUIVO .env", os.Getenv("SERVER_API_PORT_SQL"))
 
 }
 
