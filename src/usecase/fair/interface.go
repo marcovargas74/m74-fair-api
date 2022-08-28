@@ -4,14 +4,14 @@ import (
 	"github.com/marcovargas74/m74-fair-api/src/entity"
 )
 
-//Reader interface
+//Reader Fair Read interface
 type Reader interface {
 	Get(id entity.ID) (*entity.Fair, error)
 	Search(key string, value string) ([]*entity.Fair, error)
 	List() ([]*entity.Fair, error)
 }
 
-//Writer book writer
+//Writer Fair writer interface
 type Writer interface {
 	Create(e *entity.Fair) (entity.ID, error)
 	Update(e *entity.Fair) error
