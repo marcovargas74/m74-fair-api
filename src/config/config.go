@@ -85,7 +85,7 @@ func NewConfigAPIDefault() ConfigAPI {
 func Getenv(key string) string {
 	value, exist := os.LookupEnv(key)
 	//fmt.Printf("  Getenv()..key[%s] value[%s]exist[%t]\n", key, value, exist)
-	if exist {
+	if exist && value != "" {
 		return value
 	}
 	return Environs[key]
@@ -190,4 +190,13 @@ func ConfigGetAPIGeneral() (ConfigAPI, error) {
 
 	logs.Debug("   Get APIs GENERAL Configurations-> %v ", myConfigs)
 	return myConfigs, nil
+}
+
+// IsProdType Check if Prodution Version
+func (c *ConfigAPI) IsProdType() bool {
+	return strings.Contains(c.APITypeApp, TYPE_PROD)
+}
+
+func (c *ConfigAPI) SetModTest() {
+	c.APITypeApp = TYPE_TEST
 }

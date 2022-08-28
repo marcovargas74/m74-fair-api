@@ -24,7 +24,9 @@ func init() {
 	}
 
 	GeneralConfigs = configs
-	logs.Start(*LogInFile, GeneralConfigs.APILogFile)
+
+	GeneralConfigs.SetModTest()
+	logs.Start(GeneralConfigs.IsProdType(), GeneralConfigs.APILogFile)
 
 }
 

@@ -36,12 +36,12 @@ func TestConfigGetMysqlURL(t *testing.T) {
 			wantPort:     "8800",
 		},
 		{
-			give:         "Config MySQL URL NOT Default VALUES",
-			wantUser:     "",
-			wantPass:     "",
-			wantDatabase: "",
-			wantAddr:     "",
-			wantPort:     "",
+			give:         "Config MySQL URL WITH spaces VALUES",
+			wantUser:     " ",
+			wantPass:     " ",
+			wantDatabase: " ",
+			wantAddr:     " ",
+			wantPort:     " ",
 		}}
 
 	for _, tt := range tests {
@@ -88,6 +88,7 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 		wantPortMem string
 		wantPortSQL string
 		wantLogFile string
+		wantIsProd  bool
 	}{
 		{
 			give:        "Config General Default VALUES",
@@ -95,13 +96,15 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			wantPortMem: ":5000",
 			wantPortSQL: ":5001",
 			wantLogFile: "./fairAPI.log",
+			wantIsProd:  true,
 		},
 		{
 			give:        "Config General DEV VALUES",
 			wantTypeApp: TYPE_DEV,
 			wantPortMem: ":6000",
 			wantPortSQL: ":6001",
-			wantLogFile: "",
+			wantLogFile: " ",
+			wantIsProd:  false,
 		},
 		{
 			give:        "Config General TESTs VALUES",
@@ -109,6 +112,7 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			wantPortMem: ":0000",
 			wantPortSQL: ":0001",
 			wantLogFile: "./test.txt",
+			wantIsProd:  false,
 		},
 	}
 
@@ -125,6 +129,7 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			assert.Equal(t, tc.APIServerPortMem, tt.wantPortMem)
 			assert.Equal(t, tc.APIServerPortSQL, tt.wantPortSQL)
 			assert.Equal(t, tc.APILogFile, tt.wantLogFile)
+			assert.Equal(t, tc.IsProdType(), tt.wantIsProd)
 		})
 		os.Unsetenv(_TYPE_APP)
 		os.Unsetenv(_SERVER_API_PORT_MEM)
@@ -148,4 +153,7 @@ func TestConfigAPIGeneralDefault(t *testing.T) {
 	assert.Equal(t, tc.APIServerPortMem, want.APIServerPortMem)
 	assert.Equal(t, tc.APIServerPortSQL, want.APIServerPortSQL)
 	assert.Equal(t, tc.APILogFile, want.APILogFile)
+
+	assert.Equal(t, tc.IsProdType(), true)
+
 }
