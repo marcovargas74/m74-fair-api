@@ -191,6 +191,10 @@ func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 //List All Fairs Save in DB
 func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
+	// CreateDB(NOT_DROP_DB)
+	// //repository.CreateDB(repository.DROP_DB)
+	// r.db = OpenMysql()
+
 	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
 	if err != nil {
 		logs.Error(" List() Err [%s] Could not execute a Query on DB ", err.Error())

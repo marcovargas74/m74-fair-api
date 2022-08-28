@@ -7,13 +7,13 @@ services:
     restart: always
     container_name: godockerDB
     environment:
-      # MYSQL_ROOT_PASSWORD: my-secret-pw
-      # MYSQL_DATABASE: fairAPI
-      DB_USER    : root
-      DB_PASSWORD : my-secret-pw
-      DB_DATABASE : fairAPI
-      DB_IP  : localhost
-      DB_PORT : 3307
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: fairAPI
+      # DB_USER    : root
+      # DB_PASSWORD : my-secret-pw
+      # DB_DATABASE : fairAPI
+      # DB_IP  : localhost
+      # DB_PORT : 3307
 
     ports:
       - "3307:3306"
@@ -24,13 +24,13 @@ services:
     environment: 
       MYSQL_URL: root:my-secret-pw@tcp(localhost:3307)/
       TYPE_APP: PROD
-      SERVER_API_PORT_SQL: 5010
-      SERVER_API_PORT_MEM: 5011
-      LOG_FILE: ./fairAPIdocker.log
+      # SERVER_API_PORT_SQL: 5010
+      # SERVER_API_PORT_MEM: 5011
+      # LOG_FILE: ./fairAPIdocker.log
 
     ports:      
-      - "5010:5010"
-      - "5011:5011"
+      - "5000:5000"
+      - "5001:5001"
 
     depends_on:
       - mysql-api
