@@ -1,11 +1,41 @@
-<h2 align="center">API Go FAIR:</h2>
+<h2 align="center">API Go FAIR</h2>
+The Project is an API developed in golang that exposes data from fairs in general, registered in a MySQL database. This API, when started, is available at the address "http://localhost:5001" and can be accessed via a browser or any tool that uses the HTTP protocol and uses the resources (POST/GET/PUT/PATCH/DELETE). For testing the API is also available on port 5000 but in this case the data is saved in memory, which is lost as soon as the application is finished.
+
+The project has a .json file (FairTestsMySQL.postman_collection.json/FairTestsInMemory.postman_collection.json) exported from the POSTMAN tool that can be used to test the endpoints.
+
+All source codes then in the src folder and were organized according to the Clean architecture.
+It also has a Docker folder with a docker-composer file that can be used to assemble all the environment needed to run the application. In this it starts a MySQL database service that is available on port 3307 and also raises the DOCKER of the FAIR application which is the API in question.
+(Sorry for the English. But I tried to make it as accessible as possible to most of the developer community.)
 <p>
-  <img alt="In Development" align="center" src="atWork.png" />
   <img alt="Version" src="https://img.shields.io/badge/version-1.00.0-blue.svg?cacheSeconds=2592000" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
+</p>
 
+
+## Code structure
+``` dot {engine="dot"}
+digraph CODE {
+ 
+                    main->Server
+                    main->logs
+                    main->config
+
+    Server->repository_db_mysql
+    repository_db_mysql->Server
+
+    Server->repository_fair_mysql->entity_fair
+    Server->usecase_service->api_handler_fair->presenter_fair
+           api_handler_fair->usecase_service
+    usecase_service->usecase_interface->repository_fair_mysql
+}
+
+```
+
+
+<p>
+  <img alt="In Development" align="center" src="atWork.png" />
 </p>
 
 - Go API Fair. It also has a CRUD.
@@ -14,7 +44,7 @@
 - GO
 - Docker
 - Docker-compose
-- MongoDB/SQL
+- MySQL
 
 ## Getting Started
 
@@ -29,18 +59,26 @@ git clone https://github.com/marcovargas74/m74-fair-api.git
 
 - HOW TO RUN   
 ```sh
- cd mm74-fair-api
+ cd m74-fair-api
 
  ## start dockers
  make all
 
  ## stop dockers
  make stop
+
+ ## start API in dev MODE 
+ make dev
+
+ ## Run API in Local Machine and conect to a MySql in addr localhost:3037 To Default. 
+ ## But can change addr and other config setting the .env file used the Envirment Var to set BD configure 
+ make run
+
 ```
 
 > :warning: **DB can take up to 3 minutes to start**: Be very careful here!
 
-
+## Running Project Locally Without Using DOCKER
 - Enter in project
 
 ```sh
@@ -60,71 +98,110 @@ go build -o main.go
 ```
 - Run api(port 5000)
 ```sh
- ## Run compiled project
-	go run main.go
+ ## Run compiled project in Test Mode
+	TYPE_APP=TEST go run main.go
 ```
 
+## HOW TO CONFIGURE
+```sh
+The application uses environment variables to program itself.
+These variables must be configured before running the program. Otherwise, they assumed the default values.
+Next are the environment variables used in the APP 
 
+# API Section
+TYPE_APP=PROD
+TYPE_APP=DEV
+SERVER_API_PORT_MEM=5000
+SERVER_API_PORT_SQL=5001
+LOG_FILE=./fairAPIdocker.log
+
+# Database Section
+DB_USER=root
+DB_PASSWORD=my-secret-pw
+DB_DATABASE=fairAPI
+DB_IP=localhost
+DB_PORT=3307
+
+```
+
+```sh
+## Example: Configure to DEV MODE
+TYPE_APP=DEV
+```
 
 ## API Request
 
-| Endpoint        | HTTP Method           | Description           |
-| --------------- | :-------------------: | :-------------------: |
-| `/status`       | `GET`                 | `Get status`          |
-| `/all`          | `GET`                 | `Get All CPFs/CNPJs`  |
-| `/cpfs/{cpf}`   | `GET`                 | `Check CPF`           |
-| `/cpfs/{cpf}`   | `DELETE`              | `Delete CPF`          |
-| `/cpfs`         | `GET`                 | `List All CPF`        |
-| `/cnpjs/{cnpj}` | `GET`                 | `Check a CNPJ`        |
-| `/cnpjs/{cnpj}` | `DELETE`              | `Delete CNPJ`         |
-| `/cnpjs`        | `GET`                 | `List All CNPJ`       |
+| Endpoint        | HTTP Method           | Description                  |
+| --------------- | :-------------------: | :--------------------------: |
+| `/fairs`        | `POST`                | `Create a New Fair`          |
+| `/fairs`        | `GET`                 | `List All Fairs`             |
+| `/fairs/{id}`   | `GET`                 | `Return a Fair By ID`        |
+| `/fairs?key=value`   | `GET`                 | `Return a Fair By key`       |
+|                 |                       |                              |       
+| `/fairs/{id}`   | `PUT`                 | `Update all data Fair By ID` |
+| `/fairs/{id}`   | `PATCH`               | `Update only some data of the fair By ID`  |
+| `/fairs/{id}`   | `DELETE`              | `Delete a Fair By ID`        |
 
 
 ## Test endpoints API using curl
 
-- #### Check status
+- #### Creating a new FAIR
 
 `Request`
 ```bash
-curl -i --request GET 'http://localhost:5000/status' \
+curl -i --request POST 'localhost:5000/fairs' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "PRACA SANTA HELENA",
+    "District": "VILA PRUDENTE",
+    "Region5": "Leste",
+    "neighborhood" :"VL ZELINA"
+}'
 ```
 
 `Response`
 ```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:21:25 GMT
+Content-Length: 129
 {
-    "num_total_query": 0,
-    "up_time": 7.313309784066667,
-    "start_time": "09-Jul-22 18:15:54"
+    "id": "c24c2967-8599-494e-8685-f6ec681278df",
+    "name": "PRACA SANTA HELENA",
+    "district": "VILA PRUDENTE",
+    "region5": "Leste",
+    "neighborhood": "VL ZELINA"
 }
 ```
 
-- #### Listing ALL CPF and CNPJs
+- #### Listing ALL FAIRS
 
 `Request`
 ```bash
-curl -i --request GET 'http://localhost:5000/all'
+curl -i --request GET 'localhost:5000/fairs'
 ```
 
 `Response`
 ```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:24:47 GMT
+Content-Length: 570
 
 [
     {
-        "id":"bc78d0f0-4107-4b7e-a82e-d57a0167d2ca",
-        "cpf":"682.511.941-99",
-        "is_valid":true,
-        "is_cpf":true,
-        "is_cnpj":false,
-        "created_at":"01-Jan-01 00:00:00"
+        "id": "e55887a9-2752-4009-9351-d3dc14d23675",
+        "name": "MAR PAULISTA",
+        "district": "PEDREIRA",
+        "region5": "Sul",
+        "neighborhood": "PEDREIRA"
     },
-
     {
-        "id":"3b8416ad-cd38-471c-8259-e886c0aa91af",
-        "cpf":"838.461.722-86",
-        "is_valid":true,
-        "is_cpf":true,
-        "is_cnpj":false,
-        "created_at":"01-Jan-01 00:00:00"
+        "id": "c24c2967-8599-494e-8685-f6ec681278df",
+        "name": "PRACA SANTA HELENA",
+        "district": "VILA PRUDENTE",
+        "region5": "Leste",
+        "neighborhood": "VL ZELINA"
     }
     .
     .
@@ -133,90 +210,244 @@ curl -i --request GET 'http://localhost:5000/all'
 
 ```
 
-- #### Check and Creating new CPF Consult
+
+- #### Return a FAIR By ID
 
 `Request`
 ```bash
-curl -i --request GET 'http://localhost:5000/cpfs/682.511.941-99' 
+curl -i --request GET 'http://localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df'
 ```
 
 `Response`
 ```json
+    {
+        "id": "c24c2967-8599-494e-8685-f6ec681278df",
+        "name": "PRACA SANTA HELENA",
+        "district": "VILA PRUDENTE",
+        "region5": "Leste",
+        "neighborhood": "VL ZELINA"
+    }
+
+```
+
+- #### Return a FAIR By Name
+
+`Request`
+```bash
+curl -i --request GET 'http://localhost:5000/fairs?name=santa'
+```
+
+`Response`
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:24:47 GMT
+Content-Length: 570
+[
+
+    {
+        "id": "4677b3c4-1542-4d23-a8b6-adf35acb8b5f",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    },
+    {
+        "id": "5c88fd1c-a788-4437-a49c-0a71ed9e7a4a",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    }
+    .
+    .
+    .
+]
+
+```
+
+- #### Return a FAIR By district
+
+`Request`
+```bash
+curl -i --request GET 'http://localhost:5000/fairs?district=VILA
+```
+
+`Response`
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:24:47 GMT
+Content-Length: 570
+[
+
+    {
+        "id": "4677b3c4-1542-4d23-a8b6-adf35acb8b5f",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    },
+    {
+        "id": "5c88fd1c-a788-4437-a49c-0a71ed9e7a4a",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    }
+    .
+    .
+    .
+]
+
+```
+- #### Return a FAIR By region5
+
+`Request`
+```bash
+curl -i --request GET 'http://localhost:5000/fairs?region5=este'
+```
+
+`Response`
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:24:47 GMT
+Content-Length: 570
+[
+
+    {
+        "id": "4677b3c4-1542-4d23-a8b6-adf35acb8b5f",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    },
+    {
+        "id": "5c88fd1c-a788-4437-a49c-0a71ed9e7a4a",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    }
+    .
+    .
+    .
+]
+
+```
+- #### Return a FAIR By neighborhood
+
+`Request`
+```bash
+curl -i --request GET 'http://localhost:5000/fairs?neighborhood=VL'
+```
+
+`Response`
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:24:47 GMT
+Content-Length: 570
+[
+
+    {
+        "id": "4677b3c4-1542-4d23-a8b6-adf35acb8b5f",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    },
+    {
+        "id": "5c88fd1c-a788-4437-a49c-0a71ed9e7a4a",
+        "name": "VILA FORMOSA",
+        "district": "VILA FORMOSA",
+        "region5": "Leste",
+        "neighborhood": "VL FORMOSA"
+    }
+    .
+    .
+    .
+]
+
+```
+
+
+- #### Update all data Fair By ID
+
+`Request`
+```bash
+curl -i --request PUT 'localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "PRACA NOVA",
+    "District": "VILA NOVA",
+    "Region5": "Sul",
+    "neighborhood" :"VL NOVA"
+}'
+```
+
+`Response`
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:21:25 GMT
+Content-Length: 129
+
 {
-    "id": "28f0d8fa-f76f-47bd-bd65-58a3c4ee9c12",
-    "cpf": "682.511.941-99",
-    "is_valid": true,
-    "is_cpf": true,
-    "is_cnpj": false,
-    "created_at":"09-Jul-22 18:50:56"
+    "id": "c24c2967-8599-494e-8685-f6ec681278df",
+    "name": "PRACA NOVA",
+    "district": "VILA NOVA",
+    "region5": "Sul",
+    "neighborhood": "VL NOVA"
 }
 ```
-- #### Listing CPFs
+
+- #### Update only some data of the fair By ID
 
 `Request`
 ```bash
-curl -i --request GET 'http://localhost:5000/cpfs'
+curl -i --request PATCH 'localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "Region5": "Norte",
+    "neighborhood" :"NovoBairro"
+}'
 ```
 
 `Response`
+
 ```json
-[
-    {
-    "id":"5cf59c6c-0047-4b13-a118-65878313e329",
-    "cpf":"111.111.111-11",
-    "status":"isValid",
-    "created_at":"2022-01-24T10:10:02Z"
-    }
-]
-```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 28 Aug 2022 17:21:25 GMT
+Content-Length: 129
 
-- #### Delete CPF Number
-
-`Request`
-```bash
-curl -i --request DELETE 'http://localhost:5000/cpfs/682.511.941-99' 
-```
-
-- #### Check and Creating new CNPJ Consult
-
-`Request`
-```bash
-curl -i --request POST 'http://localhost:5000/cnpj/73.212.132/0001-50' 
-```
-
-`Response`
-```json
 {
-    "id":"7cf59c6c-0047-4b13-a118-65878313e329",
-    "cnpj":"73.212.132/0001-50",
-    "status":"isValid",
-    "created_at":"2022-01-24T10:10:02Z"
+    "id": "c24c2967-8599-494e-8685-f6ec681278df",
+    "name": "PRACA NOVA",
+    "district": "VILA NOVA",
+    "region5": "Norte",
+    "neighborhood": "NovoBairro"
 }
 ```
-- #### Listing CNPJs
+
+
+- #### Delete a Fair By ID
 
 `Request`
 ```bash
-curl -i --request GET 'http://localhost:5000/cnpj'
+curl -i --request DELETE 'http://localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df' 
 ```
-
 `Response`
-```json
-[
-    {
-    "id":"7cf59c6c-0047-4b13-a118-65878313e329",
-    "cnpj":"73.212.132/0001-50",
-    "status":"isValid",
-    "created_at":"2022-01-24T10:10:02Z"
-    }
-]
-```
+```body
+HTTP/1.1 200 OK
+Date: Sun, 28 Aug 2022 17:28:16 GMT
+Content-Length: 23
+Content-Type: text/plain; charset=utf-8
 
-- #### Delete CNPJ Number
+Sucesso ao deletar dado
 
-`Request`
-```bash
-curl -i --request DELETE 'http://localhost:5000/cnpj/73.212.132/0001-50' 
 ```
 
 
@@ -225,12 +456,17 @@ curl -i --request DELETE 'http://localhost:5000/cnpj/73.212.132/0001-50'
 
 ## Next Steps
 - Make a refactory
-- Fix some bugs
+- Fix run by docker-compose
 - Add more tests
-- make a interface web to test api
+- make a endpoint to configure api
 
 ## Author
 - Marco Antonio Vargas - [marcovargas74](https://github.com/marcovargas74)
+
+## Reference
+- After installing Go and setting up your GOPATH, 
+- [clean-architecture-2anos-depois - Ellton Minetto](https://eltonminetto.dev/post/2020-06-29-clean-architecture-2anos-depois/) 
+
 
 ## License
 Copyright © 2022 [marcovargas74](https://github.com/marcovargas74).
