@@ -48,18 +48,6 @@ func CreateDB(isDropTable bool) {
 	}
 
 	exec(db, TAB_FAIR_CREATE)
-	/*exec(db, `create table IF NOT EXISTS fair(
-	   	idx integer auto_increment,
-	   	id varchar(50) ,
-	   	name varchar(50),
-	   	district varchar(18),
-	   	region5 varchar(6),
-	   	neighborhood varchar(20),
-		created_at datetime,
-	   	updated_at datetime,
-	   	PRIMARY KEY (idx)
-	   	)`)*/
-
 }
 
 //OpenMysql create new repository
