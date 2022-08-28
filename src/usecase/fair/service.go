@@ -22,11 +22,11 @@ func NewService(r Repository) *Service {
 
 //CreateFair create a Fair
 func (s *Service) CreateFair(name string, district string, region5 string, neighborhood string) (entity.ID, error) {
-	f, err := entity.NewFair(name, district, region5, neighborhood)
+	fair, err := entity.NewFair(name, district, region5, neighborhood)
 	if err != nil {
 		return entity.NewID(), err
 	}
-	return s.repo.Create(f)
+	return s.repo.Create(fair)
 }
 
 //GetFair get a Fair
