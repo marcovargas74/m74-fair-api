@@ -78,7 +78,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 
 	if err = dataToUpdate.Validate(); err != nil {
 		w.WriteHeader(http.StatusExpectationFailed)
-		fmt.Fprint(w, entity.ErrInvalidEntity.Error())
+		fmt.Fprint(w, err.Error())
 		logs.Error("Parametro(s) invalido(s) %s", err.Error())
 		return err
 	}
