@@ -2,16 +2,19 @@ package entity
 
 import (
 	"time"
+
+	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
+	"gopkg.in/validator.v2"
 )
 
 //TODO Criar a Entidade Feira em Varias outras como Endereço subPrefeituras
 //Fair Entity data
 type Fair struct {
 	ID           ID
-	Name         string
-	District     string
-	Region5      string
-	Neighborhood string
+	Name         string `validate:"min=3,max=30,regexp=^[a-z A-Z]*$"`
+	District     string `validate:"min=3,max=18,regexp=^[a-z A-Z]*$"`
+	Region5      string `validate:"min=3,max=6,regexp=^[a-zA-Z]*$"`
+	Neighborhood string `validate:"min=3,max=20,regexp=^[a-z A-Z]*$"`
 
 	/*
 		//Endereço TODO criar entidade
@@ -45,6 +48,7 @@ func NewFair(name string, district string, region5 string, neighborhood string) 
 	}
 	err := f.Validate()
 	if err != nil {
+		logs.Error("NewFair(*) Err [%s] Could not create a entityFair", err.Error())
 		return nil, ErrInvalidEntity
 	}
 	return f, nil
@@ -52,9 +56,15 @@ func NewFair(name string, district string, region5 string, neighborhood string) 
 
 //Validate validate Fair
 func (f *Fair) Validate() error {
-	if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
-		return ErrInvalidEntity
+
+	if errs := validator.Validate(f); errs != nil {
+		logs.Error("NewFair(*) Err [%s] Could not create a entityFair", errs.Error())
+		return errs
 	}
+
+	// if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
+	// 	return ErrInvalidEntity
+	// }
 	return nil
 }
 
