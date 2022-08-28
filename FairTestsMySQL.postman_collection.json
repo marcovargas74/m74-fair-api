@@ -1,0 +1,903 @@
+{
+	"info": {
+		"_postman_id": "1d3dea26-16f9-4d40-a515-d796890757c6",
+		"name": "Fair Tests MySQL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "fair",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"console.log( jsonData.id)",
+							"pm.globals.set(\"IDFair\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"VILA FORMOSA\",\n    \"District\": \"VILA FORMOSA\",\n    \"Region5\": \"Leste\",\n    \"neighborhood\" :\"VL FORMOSA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"PRACA SANTA HELENA\",\n    \"District\": \"VILA PRUDENTE\",\n    \"Region5\": \"Leste\",\n    \"neighborhood\" :\"VL ZELINA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"CRUZ DAS ALMAS\",\n    \"District\": \"FREGUESIA\",\n    \"Region5\": \"Norte\",\n    \"neighborhood\" :\"CRUZ DAS ALMAS\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"MAR PAULISTA\",\n    \"District\": \"PEDREIRA\",\n    \"Region5\": \"Sul\",\n    \"neighborhood\" :\"PEDREIRA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// var IDVila = pm.environment.get(\"id\");",
+							"// console.debug(IDVila)",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs/{{IDFair}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs",
+						"{{IDFair}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair?district",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs?district=VILA",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					],
+					"query": [
+						{
+							"key": "district",
+							"value": "VILA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair?name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs?name=vila",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "vila"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair?region5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs?region5=Sul",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					],
+					"query": [
+						{
+							"key": "region5",
+							"value": "Sul"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair?neighborhood",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs?neighborhood=VL",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs"
+					],
+					"query": [
+						{
+							"key": "neighborhood",
+							"value": "VL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair{id}Fail datalong",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 417\", function () {",
+							"    pm.response.to.have.status(417);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Region5\": \"PTHLONGGG\",\n    \"neighborhood\" :\"NOvoBairroPATH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs/{{IDFair}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs",
+						"{{IDFair}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Region5\": \"PTH\",\n    \"neighborhood\" :\"NOvoBairroPATH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs/{{IDFair}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs",
+						"{{IDFair}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.globals.get(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Novo Nome\",\n    \"District\": \"Novo Distrito\",\n    \"Region5\": \"NOvo\",\n    \"neighborhood\" :\"NOvoBairro\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/fairs/{{IDFair}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs",
+						"{{IDFair}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fair{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// pm.globals.get(\"{{IDVila}}\");",
+							"// //console.debug(IDVila)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "@Alice11",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "111.111.111-11",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:5001/fairs/{{IDFair}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"fairs",
+						"{{IDFair}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
