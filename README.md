@@ -15,7 +15,7 @@ It also has a Docker folder with a docker-composer file that can be used to asse
 
 
 ## Code structure
-``` dot {engine="dot"}
+<!-- ``` dot {engine="dot"}
 digraph CODE {
  
                     main->Server
@@ -30,8 +30,10 @@ digraph CODE {
            api_handler_fair->usecase_service
     usecase_service->usecase_interface->repository_fair_mysql
 }
-
-```
+``` -->
+<p>
+  <img alt=" Code Diagram" align="center" src="CodeDiagram.png" />
+</p>
 
 
 <p>
