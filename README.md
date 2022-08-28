@@ -18,16 +18,16 @@ It also has a Docker folder with a docker-composer file that can be used to asse
 <!-- ``` dot {engine="dot"}
 digraph CODE {
  
-                    main->Server
+                    main->handler_server
                     main->logs
                     main->config
 
-    Server->repository_db_mysql
-    repository_db_mysql->Server
+    handler_server->repository_db_mysql
+    repository_db_mysql->handler_server
 
-    Server->repository_fair_mysql->entity_fair
-    Server->usecase_service->api_handler_fair->presenter_fair
-           api_handler_fair->usecase_service
+    handler_server->repository_fair_mysql->entity_fair
+    handler_server->usecase_service->handler_fair->presenter_fair
+           handler_fair->usecase_service
     usecase_service->usecase_interface->repository_fair_mysql
 }
 ``` -->
