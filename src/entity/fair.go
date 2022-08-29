@@ -62,9 +62,6 @@ func (f *Fair) Validate() error {
 		return errs
 	}
 
-	// if f.Name == "" || f.District == "" || f.Region5 == "" || f.Neighborhood == "" {
-	// 	return ErrInvalidEntity
-	// }
 	return nil
 }
 
