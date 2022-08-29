@@ -25,6 +25,7 @@ const (
 
 	DEFAULT_LOG_FILE = "./fairAPI.log"
 	DEFAULT_ENV_FILE = "./env"
+	DEFAULT_CSV_FILE = "defaultValues.csv"
 	TYPE_PROD        = "PROD"
 	TYPE_DEV         = "DEV"
 	TYPE_TEST        = "TEST"
