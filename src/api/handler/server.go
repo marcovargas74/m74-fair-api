@@ -27,10 +27,10 @@ func (s *ServerAPI) DefaultEndpoint(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//NewServerAPIMemory Cria as Rotas Padrão em Memoria
+//NewServerAPIMemory Create Default Routes in Memory
 func NewServerAPIMemory() *ServerAPI {
 
-	logs.Info("Cria as Rotas e salva dados em Memoria %v", "NewServerAPIMemory")
+	logs.Info("%s Create Default Routes", logs.ThisFunction())
 	server := new(ServerAPI)
 	routerG := mux.NewRouter()
 	routerG.HandleFunc("/", server.DefaultEndpoint).Methods("GET")
@@ -52,26 +52,26 @@ func NewServerAPIMemory() *ServerAPI {
 func StartAPI_Memory(portToAcessAPI string) {
 	servidor := NewServerAPIMemory()
 
-	logs.Info("Server Started successfully at port-> %v", portToAcessAPI)
+	logs.Info("%s Started successfully at port-> %v", logs.ThisFunction(), portToAcessAPI)
 	if err := http.ListenAndServe(portToAcessAPI, servidor); err != nil {
-		logs.Error("Fail to conect in port-> %v %v", portToAcessAPI, err)
+		logs.Error("Failed to connect to port-> %v %v", portToAcessAPI, err)
 	}
 }
 
 //StartAPI_MySQL Inicia Servidor http que vai prover a API salva os dados no MySQL
 func StartAPI_MySQL(portToAcessAPI string) {
-	servidor := NewServerAPIMYSQL()
+	servidor := NewServerAPIMySQL()
 
-	logs.Info("Server MYSQL Started successfully at port-> %v", portToAcessAPI)
+	logs.Info("%s Started successfully at port-> %v", logs.ThisFunction(), portToAcessAPI)
 	if err := http.ListenAndServe(portToAcessAPI, servidor); err != nil {
-		logs.Error("Fail to conect in port-> %v %v", portToAcessAPI, err)
+		logs.Error("Failed to connect to port-> %v %v", portToAcessAPI, err)
 	}
 }
 
-//NewServerAPIMYSQL Cria as Rotas Padrão
-func NewServerAPIMYSQL() *ServerAPI {
+//NewServerAPIMySQL Create Default Routes in MySQL
+func NewServerAPIMySQL() *ServerAPI {
 
-	logs.Info("Cria as Rotas %v", "NewServerAPIMYSQL")
+	logs.Info("%s Create Default Routes", logs.ThisFunction())
 	server := new(ServerAPI)
 	routerG := mux.NewRouter()
 	routerG.HandleFunc("/", server.DefaultEndpoint).Methods("GET")

@@ -123,7 +123,7 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			os.Setenv(_LOG_FILE, tt.wantLogFile)
 
 			tc, _ := ConfigGetAPIGeneral()
-			fmt.Printf("  TestConfigGetAPIGeneral()..isProd[%s]portM[%s]portDB[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL)
+			logs.Debug("  TestConfigGetAPIGeneral()..isProd[%s]portM[%s]portDB[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL)
 			assert.Equal(t, tc.APITypeApp, tt.wantTypeApp)
 			assert.Equal(t, tc.APIServerPortMem, tt.wantPortMem)
 			assert.Equal(t, tc.APIServerPortSQL, tt.wantPortSQL)

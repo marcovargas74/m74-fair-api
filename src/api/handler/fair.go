@@ -20,7 +20,7 @@ func handlerID(w http.ResponseWriter, r *http.Request) (entity.ID, error) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, entity.ErrInvalidID.Error())
-		logs.Error("ERRO: [%s] Nao conseguiu Converte o ID %v \n", entity.ErrInvalidID.Error(), id)
+		logs.Error("ERROR: [%s] Failed to convert ID %v \n", entity.ErrInvalidID.Error(), id)
 		return entity.ID(id), err
 	}
 
@@ -31,14 +31,14 @@ func handlerSearchError(w http.ResponseWriter, data *entity.Fair, err error) err
 	if err != nil && err != entity.ErrNotFound {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err.Error())
-		logs.Error("ERRO: [%s] DESCONHECIDO \n", err.Error())
+		logs.Error("Unknown ERROR: [%s] \n", err.Error())
 		return err
 	}
 
 	if data == nil {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, entity.ErrNotFound.Error())
-		logs.Info("Info: [%s] Nenhum elemento gravado na lista \n", entity.ErrNotFound.Error())
+		logs.Info("INFO: [%s] No elements recorded in the list", entity.ErrNotFound.Error())
 		return entity.ErrNotFound
 	}
 	return nil
@@ -49,7 +49,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 	if r.Method == http.MethodPatch && newData.Name == "" && newData.District == "" && newData.Region5 == "" && newData.Neighborhood == "" {
 		w.WriteHeader(http.StatusExpectationFailed)
 		fmt.Fprint(w, entity.ErrInvalidEntity.Error())
-		logs.Error("Parametro(s) invalido(s) %s \n", entity.ErrInvalidEntity.Error())
+		logs.Error("Invalid parameter(s) %s ", entity.ErrInvalidEntity.Error())
 		return entity.ErrInvalidEntity
 	}
 
@@ -57,7 +57,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 	if r.Method == http.MethodPut && err != nil {
 		w.WriteHeader(http.StatusExpectationFailed)
 		fmt.Fprint(w, entity.ErrInvalidEntity.Error())
-		logs.Error("Parametro(s) invalido(s) %s \n", err.Error())
+		logs.Error("Invalid parameter(s) %s", err.Error())
 		return err
 	}
 
@@ -80,7 +80,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 	if err = dataToUpdate.Validate(); err != nil {
 		w.WriteHeader(http.StatusExpectationFailed)
 		fmt.Fprint(w, err.Error())
-		logs.Error("Parametro(s) invalido(s) %s", err.Error())
+		logs.Error("Invalid parameter(s) %s", err.Error())
 		return err
 	}
 
@@ -107,7 +107,7 @@ func listFairs(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("ERRO: [%s] DESCONHECIDO \n", err.Error())
+			logs.Error("Unknown ERROR: [%s]", err.Error())
 			return
 		}
 
@@ -122,7 +122,7 @@ func listFairs(service fair.UseCase) http.Handler {
 		if err := json.NewEncoder(w).Encode(toJSONList); err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("listFairs()Falha ao converter o dado pra JSON %s", err.Error())
+			logs.Error("listFairs()Failed to convert data to JSON %s", err.Error())
 			return
 		}
 
@@ -137,7 +137,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("createFair()Falha ao recuparar os dados passado no endpoint %s \n", err.Error())
+			logs.Error("createFair()Failed to retrieve past data from endpoint [%s] ", err.Error())
 			return
 		}
 		defer r.Body.Close()
@@ -145,7 +145,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err = input.Validate(); err != nil {
 			w.WriteHeader(http.StatusExpectationFailed)
 			fmt.Fprint(w, entity.ErrInvalidEntity.Error())
-			logs.Error("Parametro(s) invalido(s) %s", err.Error())
+			logs.Error("Invalid parameter(s) %s", err.Error())
 			return
 		}
 
@@ -153,7 +153,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, entity.ErrCannotBeCreated.Error())
-			logs.Error("createFair()Falha ao Criar dados %s", err.Error())
+			logs.Error("createFair()Failed on Data Create %s", err.Error())
 			return
 		}
 
@@ -162,7 +162,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("createFair()Falha ao converter o dado pra JSON %s", err.Error())
+			logs.Error("createFair()Failed to convert data to JSON %s", err.Error())
 			return
 		}
 
@@ -191,7 +191,7 @@ func getFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("getFair()Falha ao converter o dado pra JSON %s", err.Error())
+			logs.Error("getFair()Failed to convert data to JSON %s", err.Error())
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -210,7 +210,7 @@ func updateFair(service fair.UseCase) http.Handler {
 
 		dataToUpdate, err := service.GetFair(id)
 		if err = handlerSearchError(w, dataToUpdate, err); err != nil {
-			logs.Error("ERRO: [%s] Nao achou o ID %v \n", entity.ErrInvalidID.Error(), id)
+			logs.Error("ERROR: [%s] ID [%v] did not find\n", entity.ErrInvalidID.Error(), id)
 			return
 		}
 
@@ -219,7 +219,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("updateFair()Falha ao recuparar os dados passado no endpoint %s \n", err.Error())
+			logs.Error("updateFair()Failed to retrieve past data from endpoint %s \n", err.Error())
 			return
 		}
 		defer r.Body.Close()
@@ -227,10 +227,11 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err = handlerValidateUpdate(w, r, newData, dataToUpdate); err != nil {
 			return
 		}
+
 		if err = service.UpdateFair(dataToUpdate); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("updateFair()Falha ao atualizar dados %s", err.Error())
+			logs.Error("updateFair()Failed to update data %s", err.Error())
 			return
 		}
 
@@ -238,7 +239,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("updateFair()Falha ao converter o dado pra JSON %s", err.Error())
+			logs.Error("updateFair()Failed to convert data to JSON %s", err.Error())
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -259,10 +260,10 @@ func deleteFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, entity.ErrCannotBeDeleted.Error())
-			logs.Error("deleteFair()Falha ao DELETAR dados %s", err.Error())
+			logs.Error("deleteFair()Data deleted - FAILED Err[%s]", err.Error())
 			return
 		}
-		w.Write([]byte("Sucesso ao deletar dado"))
+		fmt.Fprint(w, "Data deleted - SUCCESSFULLY")
 		w.WriteHeader(http.StatusOK)
 
 	})
@@ -281,10 +282,10 @@ func importFileCSV(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("importFileCSV()Falha ao importar dados do arquivo CSV %s", err.Error())
+			logs.Error("importFileCSV()Data imported FAILED from .CSV file %s", err.Error())
 			return
 		}
-		w.Write([]byte("Sucesso ao Importar dados do arquivo .CSV"))
+		fmt.Fprint(w, "Data imported SUCCESSFULLY from .CSV file")
 		w.WriteHeader(http.StatusOK)
 
 	})

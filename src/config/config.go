@@ -45,8 +45,8 @@ const (
 	_LOG_FILE            = "LOG_FILE"
 )
 
-//Environs Foi padronizado todas as variaveis de ambiente com underLine no inicio
-//Sempre que criar uma variavel de configuracao deve incluir nos ambiente a sua correspondente default
+//Environs All environment variables have been standardized with underLine at the beginning
+//Whenever you create a configuration variable, you must include its corresponding default in the environment.
 var Environs = map[string]string{
 
 	_SERVER_API_PORT_MEM: DEFAULT_SERVER_API_PORT_MEM,
@@ -61,7 +61,7 @@ var Environs = map[string]string{
 	_DB_PORT:     DEFAULT_DB_PORT,
 }
 
-//ConfigAPI è a estrutura de Variaveis de configuracao de todo o sistema
+//ConfigAPI Is the configuration variables structure of the entire system
 type ConfigAPI struct {
 	//DB
 	MYSQLUser     string `default:"root"`
@@ -77,6 +77,7 @@ type ConfigAPI struct {
 	APILogFile       string `default:"./fairAPI.log"`
 }
 
+//NewConfigAPIDefault Returns the default api settings
 func NewConfigAPIDefault() ConfigAPI {
 	return ConfigAPI{
 		APIServerPortMem: DEFAULT_SERVER_API_PORT_MEM,
@@ -86,7 +87,7 @@ func NewConfigAPIDefault() ConfigAPI {
 	}
 }
 
-func Getenv(key string) string {
+func getEnv(key string) string {
 	value, exist := os.LookupEnv(key)
 	logs.Debug("  Getenv()..key[%s] value[%s]exist[%t]\n", key, value, exist)
 	if exist && value != "" {
@@ -95,18 +96,19 @@ func Getenv(key string) string {
 	return Environs[key]
 }
 
+//CreateNewConfigAPI Creates the application's initial settings by searching for environment variables
 func CreateNewConfigAPI() (ConfigAPI, error) {
 	config := ConfigAPI{
-		MYSQLUser:     Getenv(_DB_USER),
-		MYSQLPassword: Getenv(_DB_PASSWORD),
-		MYSQLDatabase: Getenv(_DB_DATABASE),
-		MYSQLAddress:  Getenv(_DB_ADDRESS),
-		MYSQLPortTCP:  Getenv(_DB_PORT),
+		MYSQLUser:     getEnv(_DB_USER),
+		MYSQLPassword: getEnv(_DB_PASSWORD),
+		MYSQLDatabase: getEnv(_DB_DATABASE),
+		MYSQLAddress:  getEnv(_DB_ADDRESS),
+		MYSQLPortTCP:  getEnv(_DB_PORT),
 
-		APIServerPortMem: Getenv(_SERVER_API_PORT_MEM),
-		APIServerPortSQL: Getenv(_SERVER_API_PORT_SQL),
-		APITypeApp:       Getenv(_TYPE_APP),
-		APILogFile:       Getenv(_LOG_FILE),
+		APIServerPortMem: getEnv(_SERVER_API_PORT_MEM),
+		APIServerPortSQL: getEnv(_SERVER_API_PORT_SQL),
+		APITypeApp:       getEnv(_TYPE_APP),
+		APILogFile:       getEnv(_LOG_FILE),
 	}
 	err := config.Validate()
 	if err != nil {
@@ -131,7 +133,7 @@ func (c *ConfigAPI) Validate() error {
 func NewConfigAPI() (ConfigAPI, error) {
 	config, err := CreateNewConfigAPI()
 	if err != nil {
-		logs.Error("Fail to Create NewConfigAPI()-> %v ", err.Error())
+		logs.Error("%s Fail to Create NewConfigAPI()-> %v ", logs.ThisFunction(), err.Error())
 		return NewConfigAPIDefault(), entity.ErrDefaultConfig
 
 	}
@@ -139,11 +141,12 @@ func NewConfigAPI() (ConfigAPI, error) {
 	return config, nil
 }
 
+//ConfigGetMysqlURL retorna o endereço URL do banco de dados
 func ConfigGetMysqlURL() (string, error) {
 
 	mySQLConfig, err := NewConfigAPI()
 	if err != nil && err != entity.ErrDefaultConfig {
-		logs.Error("Fail to Get MySQL Configurations-> %v ", err.Error())
+		logs.Error("%s Fail to Get MySQL Configurations->[%v] ", logs.ThisFunction(), err.Error())
 		return DEFAULT_URL_MYSQL, err
 	}
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
@@ -152,26 +155,27 @@ func ConfigGetMysqlURL() (string, error) {
 	return dataSourceName, err
 }
 
-// DataBaseName Retorna nome da Base de dados usada
+// DataBaseName Returns name of the used database
 func DataBaseName() string {
 	dataBase, err := ConfigGetMysqlURL()
 	if err != nil {
-		logs.Warn("Usando Banco DEFAULT err:[%v] ", err.Error())
+		logs.Warn("Using DEFAULT DB err:[%v] ", err.Error())
 	}
 
 	i := strings.LastIndex(dataBase, "/")
 	if i == -1 {
 		return dataBase
 	}
+
 	return dataBase[i+1:]
 
 }
 
-// DataBaseURL Retorna a URL da Base de dados usada. Necessario para Abrir o DB
+// DataBaseURL Returns the URL of the Database used. Required to Open DB
 func DataBaseURL() string {
 	dataBase, err := ConfigGetMysqlURL()
 	if err != nil {
-		logs.Warn("Usando Banco DEFAULT err:[%v] ", err.Error())
+		logs.Warn("Using DEFAULT DB err:[%v] ", err.Error())
 	}
 
 	i := strings.LastIndex(dataBase, "/")
@@ -206,7 +210,6 @@ func (c *ConfigAPI) SetModTest() {
 	c.APITypeApp = TYPE_TEST
 }
 
-//LoadFromFileEnv sets the value of the environment variable from a file (.env)
 func cpyFilesFromDocker() {
 	cmd := exec.Command("cp", "-prf", "../../docker/defaultValues.csv", DEFAULT_CSV_FILE)
 	cmd.Run()

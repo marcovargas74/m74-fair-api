@@ -17,7 +17,7 @@ type Fair struct {
 	Neighborhood string    `json:"neighborhood"`
 }
 
-//NewCreateFairPresenter .
+//NewCreateFairPresenter create fair to be used in the return of the endpoint
 func NewCreateFairPresenter(e *entity.Fair) Fair {
 	return Fair{
 		ID:           e.ID,
@@ -28,7 +28,7 @@ func NewCreateFairPresenter(e *entity.Fair) Fair {
 	}
 }
 
-//NewCreateFairPresenterJSON .
+//NewCreateFairPresenterJSON create fair(in JSON format) to be used in the return of the endpoint
 func NewCreateFairPresenterJSON(e *entity.Fair) ([]byte, error) {
 
 	toJSON := NewCreateFairPresenter(e)
@@ -43,18 +43,7 @@ func (f *Fair) Validate() error {
 	return nil
 }
 
-//ConvertToFairPresenter presenter
-func (f *Fair) ConvertToFairPresenter(e *entity.Fair) Fair {
-	return Fair{
-		ID:           e.ID,
-		Name:         e.Name,
-		District:     e.District,
-		Region5:      e.Region5,
-		Neighborhood: e.Neighborhood,
-	}
-}
-
-//SelectKeySearch	Retorna parametro de busca. Caso for passado mais de um, retorna o primeiro
+//SelectKeySearch	Returns search parameter. If more than one is passed, returns the first
 func SelectKeySearch(r *http.Request) (string, string) {
 	logs.Debug("SelectKeySearch url[%v] ", r.URL)
 	value := r.URL.Query().Get("name")
