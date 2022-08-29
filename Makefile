@@ -8,6 +8,8 @@ dev: clean deps build docker-dev-up run
 
 stop-dev: docker-dev-down
 
+tests: test cover
+
 
 clean:
 	@go clean
@@ -17,7 +19,7 @@ deps:
 	@go get -v ./...
 
 test:
-	@go test -v ./...
+	@go test -v ./... 
 
 build:
 	@cd src/fair && go vet && go build main.go 
@@ -40,4 +42,7 @@ docker-dev-down:
 
 run:
 	@cd src/fair && TYPE_APP=DEV go run main.go 
+
+cover:
+	@go test ./... -coverprofile="go-cover-fair.tmp"
 

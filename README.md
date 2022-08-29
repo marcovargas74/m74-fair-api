@@ -104,6 +104,21 @@ go build -o main.go
 	TYPE_APP=TEST go run main.go
 ```
 
+- OTHER FEATURES OF MAKE
+```sh
+
+ ## Test All Code (go test)
+ make test
+
+ ## check test coverage (go coverage) and save in go-cover-fair.tmp
+ make cover
+
+ ## Run make test and cover  
+ make tests
+
+```
+
+
 ## HOW TO CONFIGURE
 ```sh
 The application uses environment variables to program itself.
@@ -113,8 +128,8 @@ Next are the environment variables used in the APP
 # API Section
 TYPE_APP=PROD
 TYPE_APP=DEV
-SERVER_API_PORT_MEM=5000
-SERVER_API_PORT_SQL=5001
+SERVER_API_PORT_MEM=:5000
+SERVER_API_PORT_SQL=:5001
 LOG_FILE=./fairAPIdocker.log
 
 # Database Section
