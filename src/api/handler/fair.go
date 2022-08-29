@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/marcovargas74/m74-fair-api/src/api/presenter"
+	"github.com/marcovargas74/m74-fair-api/src/config"
 	"github.com/marcovargas74/m74-fair-api/src/entity"
 	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 	"github.com/marcovargas74/m74-fair-api/src/usecase/fair"
@@ -267,12 +268,36 @@ func deleteFair(service fair.UseCase) http.Handler {
 	})
 }
 
+func importFileCSV(service fair.UseCase) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		vars := mux.Vars(r)
+		file := (vars["file"])
+		if file == "" {
+			file = config.DEFAULT_CSV_FILE
+		}
+
+		err := service.ImportFileCSV(file)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, err.Error())
+			logs.Error("importFileCSV()Falha ao importar dados do arquivo CSV %s", err.Error())
+			return
+		}
+		w.Write([]byte("Sucesso ao Importar dados do arquivo .CSV"))
+		w.WriteHeader(http.StatusOK)
+
+	})
+}
+
 //MakeFairHandlers Cria Rotas usado para manipular a Feira
 func MakeFairHandlers(r *mux.Router, n negroni.Negroni, service fair.UseCase) {
 
-	r.Handle("/fairs", n.With(negroni.Wrap(listFairs(service)))).Methods("GET", "OPTIONS").Name("listFairs")
-	r.Handle("/fairs", n.With(negroni.Wrap(createFair(service)))).Methods("POST", "OPTIONS").Name("createFair")
-	r.Handle("/fairs/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET", "OPTIONS").Name("getFair")
-	r.Handle("/fairs/{id}", n.With(negroni.Wrap(updateFair(service)))).Methods("PUT", "PATCH", "OPTIONS").Name("updateFair")
-	r.Handle("/fairs/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE", "OPTIONS").Name("deleteFair")
+	r.Handle("/fairs", n.With(negroni.Wrap(listFairs(service)))).Methods("GET").Name("listFairs")
+	r.Handle("/fairs", n.With(negroni.Wrap(createFair(service)))).Methods("POST").Name("createFair")
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(getFair(service)))).Methods("GET").Name("getFair")
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(updateFair(service)))).Methods("PUT", "PATCH").Name("updateFair")
+	r.Handle("/fairs/{id}", n.With(negroni.Wrap(deleteFair(service)))).Methods("DELETE").Name("deleteFair")
+
+	r.Handle("/fairs/import/{file}", n.With(negroni.Wrap(importFileCSV(service)))).Methods("POST").Name("updateFile")
 }
