@@ -2,7 +2,6 @@ package logs
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"runtime"
 	"strings"
@@ -41,8 +40,9 @@ func Start(isProg bool, filepath string) {
 	}
 	AppFileLog, err := os.OpenFile(filepath, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
-		log.Panic(err)
+		Error("Err [%s] Could not Open log FILE", err.Error())
 	}
+
 	if !isProg {
 		Logger = zerolog.New(os.Stdout)
 		return
