@@ -98,7 +98,6 @@ func NewReqEndpointsPUT(urlPrefix, urlName string) *http.Request {
 //NewReqEndpointsBodyPOST Genetic POST endpoint to test
 func NewReqEndpointsBodyPOST(urlPrefix, urlName string, json string) *http.Request {
 
-	//jsonBody := []byte(`{"client_message": "hello, server!"}`)
 	jsonBody := []byte(`{
 		"name": "VILA TESTE",
 		"District": "dstrito teste",

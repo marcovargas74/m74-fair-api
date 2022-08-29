@@ -13,7 +13,7 @@ import (
 
 const (
 	VERSION_PACKAGE = "2022-08-27"
-	//DEFAULT VALUES
+
 	DEFAULT_DB_USER     = "root"
 	DEFAULT_DB_PASSWORD = "my-secret-pw"
 	DEFAULT_DB_DATABASE = "fairAPI"
@@ -46,7 +46,7 @@ const (
 )
 
 //Environs Foi padronizado todas as variaveis de ambiente com underLine no inicio
-//Sempre que criar uma variavel de configuracao deve incluir nos ambiente a susa correspondente default
+//Sempre que criar uma variavel de configuracao deve incluir nos ambiente a sua correspondente default
 var Environs = map[string]string{
 
 	_SERVER_API_PORT_MEM: DEFAULT_SERVER_API_PORT_MEM,
@@ -88,7 +88,7 @@ func NewConfigAPIDefault() ConfigAPI {
 
 func Getenv(key string) string {
 	value, exist := os.LookupEnv(key)
-	//fmt.Printf("  Getenv()..key[%s] value[%s]exist[%t]\n", key, value, exist)
+	logs.Debug("  Getenv()..key[%s] value[%s]exist[%t]\n", key, value, exist)
 	if exist && value != "" {
 		return value
 	}
@@ -187,7 +187,6 @@ func ConfigGetAPIGeneral() (ConfigAPI, error) {
 
 	myConfigs, err := NewConfigAPI()
 
-	//fmt.Printf("  ConfigGetAPIGeneralqqq()..isProd[%s]portM[%s]portDB[%s]\n", myConfigs.APITypeApp, myConfigs.APIServerPortMem, myConfigs.APIServerPortSQL)
 	if err != nil && err != entity.ErrDefaultConfig {
 		logs.Error("Fail to Get APIs GENERAL Configurations-> %v ", err.Error())
 		return myConfigs, err

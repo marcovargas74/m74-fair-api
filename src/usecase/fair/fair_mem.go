@@ -116,7 +116,6 @@ func (r *inmem) Delete(id entity.ID) error {
 //ImportFile Import data From CSV file To MySQL
 func (r *inmem) ImportFile(filepath string) error {
 
-	//logs.Debug("localFIle pwd %d", os.NewFile("nono.pwd"))
 	csvFile, err := os.Open(filepath)
 	if err != nil {
 		logs.Error("Err [%s] Could not Open log FILE", err.Error())
@@ -125,9 +124,6 @@ func (r *inmem) ImportFile(filepath string) error {
 
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	reader.Comma = ','
-
-	//fmt.Printf("2..Le o arquivo [%v]\n", reader) //exibe dados do csv
-
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -145,8 +141,7 @@ func (r *inmem) ImportFile(filepath string) error {
 			continue
 		}
 		r.Create(fair)
-
-		fmt.Printf("30..Le o arquivo [%v]\n", fair) //exibe dados do csv
+		fmt.Printf("30..Le o arquivo [%v]\n", fair)
 
 	}
 

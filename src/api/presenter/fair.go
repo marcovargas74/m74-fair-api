@@ -2,7 +2,6 @@ package presenter
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/marcovargas74/m74-fair-api/src/entity"
@@ -57,10 +56,7 @@ func (f *Fair) ConvertToFairPresenter(e *entity.Fair) Fair {
 
 //SelectKeySearch	Retorna parametro de busca. Caso for passado mais de um, retorna o primeiro
 func SelectKeySearch(r *http.Request) (string, string) {
-	//--seleciona chave de busca---
-
 	logs.Debug("SelectKeySearch url[%v] ", r.URL)
-	fmt.Printf("SelectKeySearch url[%v] \n", r.URL)
 	value := r.URL.Query().Get("name")
 	if value != "" {
 		return "name", value
@@ -80,7 +76,7 @@ func SelectKeySearch(r *http.Request) (string, string) {
 	if value != "" {
 		return "neighborhood", value
 	}
-	//logs.Debug("listFairs key[%s] value[%s] \n", key, value)
+	logs.Debug("SelectKeySearch value[%s] \n", value)
 
 	return "", ""
 

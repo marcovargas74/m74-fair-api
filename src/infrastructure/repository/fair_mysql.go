@@ -195,10 +195,6 @@ func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 //List All Fairs Save in DB
 func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
-	// CreateDB(NOT_DROP_DB)
-	// //repository.CreateDB(repository.DROP_DB)
-	// r.db = OpenMysql()
-
 	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
 	if err != nil {
 		logs.Error(" List() Err [%s] Could not execute a Query on DB ", err.Error())
@@ -260,7 +256,6 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 //ImportFile Import data From CSV file To MySQL
 func (r *FairMySQL) ImportFile(filepath string) error {
 
-	//var csvFileFake = strings.NewReader(`1,-46550164,-23558733,355030885000091,3550308005040,87,VILA FORMOSA,26,ARICANDUVA-FORMOSA-CARRAO,Leste,Leste 1,VILA FORMOSA,4041-0,RUA MARAGOJIPE,S/N,VL FORMOSA,TV RUA PRETORIA`)
 	csvFile, err := os.Open(filepath)
 	if err != nil {
 		logs.Error("Err [%s] Could not Open log FILE", err.Error())
@@ -269,8 +264,6 @@ func (r *FairMySQL) ImportFile(filepath string) error {
 
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	reader.Comma = ','
-
-	//fmt.Printf("2..Le o arquivo [%v]\n", reader) //exibe dados do csv
 
 	for {
 		line, err := reader.Read()
@@ -290,7 +283,7 @@ func (r *FairMySQL) ImportFile(filepath string) error {
 		}
 		r.Create(fair)
 
-		fmt.Printf("30..Le o arquivo [%v]\n", fair) //exibe dados do csv
+		fmt.Printf("30..Le o arquivo [%v]\n", fair)
 
 	}
 

@@ -58,7 +58,6 @@ func TestConfigGetMysqlURL(t *testing.T) {
 			url, _ := ConfigGetMysqlURL()
 			logs.Debug("  ConfigGetMysqlURL()..url[%s]want[%s]\n", url, wantURL)
 			assert.Equal(t, url, wantURL)
-			//assert.Equal(t, "provocaErro", "")
 		})
 
 		os.Unsetenv(_DB_USER)

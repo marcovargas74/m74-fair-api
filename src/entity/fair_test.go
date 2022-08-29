@@ -11,9 +11,6 @@ func TestNewFair(t *testing.T) {
 	fair, err := entity.NewFair("PRACA SANTA HELENA", "VILA PRUDENTE", "Leste", "VL ZELINA")
 	assert.Equal(t, err, nil)
 	assert.Equal(t, fair.Name, "PRACA SANTA HELENA")
-	//assert.Nil(t, err)
-	//assert.NotNil(t, b.ID)
-
 }
 
 func TestFairValidate(t *testing.T) {

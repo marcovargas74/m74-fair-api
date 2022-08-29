@@ -31,7 +31,7 @@ func exec(db *sql.DB, sql string) sql.Result {
 
 //CreateDB Cria Base de dados e Tabelas caso nao existam ainda
 func CreateDB(isDropTable bool) {
-	//logs.Info(" CreateDB() Conectado  a URL [%s] do MySQL", config.DataBaseURL())
+	logs.Info(" CreateDB() Conectado  a URL [%s] do MySQL", config.DataBaseURL())
 	db, err := sql.Open("mysql", config.DataBaseURL())
 	if err != nil {
 		logs.Error("CreateDB() FALHA ao conectar ao Banco Mysql %v", err)
