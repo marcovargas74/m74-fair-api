@@ -1,1 +1,0 @@
-{"buildTargets":["all","build","clean","deps","docker-build","docker-deploy-down","docker-deploy-up","restart","stop","test"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
