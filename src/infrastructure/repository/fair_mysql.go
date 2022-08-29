@@ -1,10 +1,14 @@
 package repository
 
 import (
+	"bufio"
 	"database/sql"
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"time"
 
 	"github.com/marcovargas74/m74-fair-api/src/entity"
@@ -250,5 +254,45 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 	}
 
 	tx.Commit()
+	return nil
+}
+
+//ImportFile Import data From CSV file To MySQL
+func (r *FairMySQL) ImportFile(filepath string) error {
+
+	//var csvFileFake = strings.NewReader(`1,-46550164,-23558733,355030885000091,3550308005040,87,VILA FORMOSA,26,ARICANDUVA-FORMOSA-CARRAO,Leste,Leste 1,VILA FORMOSA,4041-0,RUA MARAGOJIPE,S/N,VL FORMOSA,TV RUA PRETORIA`)
+	csvFile, err := os.Open(filepath)
+	if err != nil {
+		logs.Error("Err [%s] Could not Open log FILE", err.Error())
+		return err
+	}
+
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+	reader.Comma = ','
+
+	//fmt.Printf("2..Le o arquivo [%v]\n", reader) //exibe dados do csv
+
+	for {
+		line, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			logs.Error("Err [%s] Could not Read a Line from CSV FILE", err.Error())
+			continue
+		}
+
+		fair, err := entity.NewFair(line[INDEX_NAME], line[INDEX_DISTRICT], line[INDEX_REGION5], line[INDEX_NEIGHBORHOOD])
+		if err != nil {
+			logs.Error("Err [%s] Could not Read create a entity from CSV FILE", err.Error())
+			continue
+		}
+		r.Create(fair)
+
+		fmt.Printf("30..Le o arquivo [%v]\n", fair) //exibe dados do csv
+
+	}
+
 	return nil
 }

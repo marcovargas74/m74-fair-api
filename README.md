@@ -135,6 +135,7 @@ TYPE_APP=DEV
 
 | Endpoint        | HTTP Method           | Description                  |
 | --------------- | :-------------------: | :--------------------------: |
+| `/fairs/fairs/import/{file}`   | `POST`                 | `Import Values from .csv file`        |
 | `/fairs`        | `POST`                | `Create a New Fair`          |
 | `/fairs`        | `GET`                 | `List All Fairs`             |
 | `/fairs/{id}`   | `GET`                 | `Return a Fair By ID`        |
@@ -146,6 +147,23 @@ TYPE_APP=DEV
 
 
 ## Test endpoints API using curl
+
+- #### Import Values from .csv file
+> :warning: **This import can take up to 3 minutes to complete**: Take a coffe!
+`Request`
+```bash
+curl -i --request POST 'http://localhost:5000/fairs/import/defaultValues.csv' 
+```
+`Response`
+```body
+HTTP/1.1 200 OK
+Date: Sun, 28 Aug 2022 17:28:16 GMT
+Content-Length: 41
+Content-Type: text/plain; charset=utf-8
+
+Sucesso ao Importar dados do arquivo .CSV
+
+```
 
 - #### Creating a new FAIR
 

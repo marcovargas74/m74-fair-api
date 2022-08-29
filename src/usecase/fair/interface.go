@@ -9,6 +9,7 @@ type Reader interface {
 	Get(id entity.ID) (*entity.Fair, error)
 	Search(key string, value string) ([]*entity.Fair, error)
 	List() ([]*entity.Fair, error)
+	ImportFile(fileName string) error
 }
 
 //Writer Fair writer interface
@@ -32,4 +33,5 @@ type UseCase interface {
 	CreateFair(name string, district string, region5 string, neighborhood string) (entity.ID, error)
 	UpdateFair(e *entity.Fair) error
 	DeleteFair(id entity.ID) error
+	ImportFileCSV(file string) error
 }

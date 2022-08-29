@@ -84,3 +84,8 @@ func (s *Service) UpdateFair(e *entity.Fair) error {
 	e.UpdatedAt = time.Now()
 	return s.repo.Update(e)
 }
+
+//ImportFileCSV Delete a Fair
+func (s *Service) ImportFileCSV(file string) error {
+	return s.repo.ImportFile(file)
+}
