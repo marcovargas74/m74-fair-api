@@ -17,25 +17,19 @@ var GeneralConfigs config.ConfigAPI
 
 func init() {
 	LogInFile = flag.Bool("log", false, "write log to file")
+
+	err := config.LoadFromFileEnv(config.DEFAULT_ENV_FILE)
+	if err != nil {
+		logs.Error("Error[%s]loading .env file", err.Error())
+	}
+
 	configs, err := config.ConfigGetAPIGeneral()
 	if err != nil || GeneralConfigs.APIServerPortSQL == "" {
 		logs.Error("Fail to Get Configurations-> %v ", GeneralConfigs)
 	}
 
 	GeneralConfigs = configs
-
 	logs.Start(GeneralConfigs.IsProdType(), GeneralConfigs.APILogFile)
-
-	err = config.LoadFromFileEnv(config.DEFAULT_ENV_FILE)
-	if !GeneralConfigs.IsProdType() {
-		err = config.LoadFromFileEnv("../../docker/.env")
-	}
-
-	if err != nil {
-		logs.Error("Error[%s]loading .env file", err.Error())
-	}
-	//fmt.Printf("VARIAVEL port[%s] LIDO DO ARQUIVO .env", os.Getenv("SERVER_API_PORT_SQL"))
-
 }
 
 func main() {

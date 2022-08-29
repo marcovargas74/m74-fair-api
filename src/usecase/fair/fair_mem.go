@@ -116,8 +116,6 @@ func (r *inmem) Delete(id entity.ID) error {
 //ImportFile Import data From CSV file To MySQL
 func (r *inmem) ImportFile(filepath string) error {
 
-	_, _ = os.OpenFile("nonono.txt", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
-
 	//logs.Debug("localFIle pwd %d", os.NewFile("nono.pwd"))
 	csvFile, err := os.Open(filepath)
 	if err != nil {
