@@ -3,7 +3,6 @@ package fair
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -118,7 +117,7 @@ func (r *inmem) ImportFile(filepath string) error {
 
 	csvFile, err := os.Open(filepath)
 	if err != nil {
-		logs.Error("Err [%s] Could not Open log FILE", err.Error())
+		logs.Error("%s Err [%s] Could not Open log FILE", logs.ThisFunction(), err.Error())
 		return err
 	}
 
@@ -131,17 +130,18 @@ func (r *inmem) ImportFile(filepath string) error {
 		}
 
 		if err != nil {
-			logs.Error("Err [%s] Could not Read a Line from CSV FILE", err.Error())
+			logs.Error("%s Err [%s] Could not Read a Line from CSV FILE", logs.ThisFunction(), err.Error())
 			continue
 		}
 
 		fair, err := entity.NewFair(line[INDEX_NAME], line[INDEX_DISTRICT], line[INDEX_REGION5], line[INDEX_NEIGHBORHOOD])
 		if err != nil {
-			logs.Error("Err [%s] Could not Read create a entity from CSV FILE", err.Error())
+			logs.Error("%s Err [%s] Could not Read create a entity from CSV FILE", logs.ThisFunction(), err.Error())
 			continue
 		}
 		r.Create(fair)
-		fmt.Printf("30..Le o arquivo [%v]\n", fair)
+
+		logs.Debug("%s entityFAIR [%v] READ from .CSV file\n", logs.ThisFunction(), fair)
 
 	}
 

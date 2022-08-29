@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/marcovargas74/m74-fair-api/src/entity"
-	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
 //Service fair usecase
@@ -32,10 +31,8 @@ func (s *Service) CreateFair(name string, district string, region5 string, neigh
 //GetFair get a Fair
 func (s *Service) GetFair(id entity.ID) (*entity.Fair, error) {
 
-	logs.Debug("GetFair(id %s)", id)
 	fair, err := s.repo.Get(id)
 	if fair == nil {
-		logs.Warn("GetFair(id %s) warning:[%s]", id, entity.ErrNotFound.Error())
 		return nil, entity.ErrNotFound
 	}
 
