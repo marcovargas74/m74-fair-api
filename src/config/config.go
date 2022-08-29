@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -24,7 +25,7 @@ const (
 	DEFAULT_SERVER_API_PORT_SQL = ":5001"
 
 	DEFAULT_LOG_FILE = "./fairAPI.log"
-	DEFAULT_ENV_FILE = "./env"
+	DEFAULT_ENV_FILE = "./.env"
 	DEFAULT_CSV_FILE = "defaultValues.csv"
 	TYPE_PROD        = "PROD"
 	TYPE_DEV         = "DEV"
@@ -207,11 +208,20 @@ func (c *ConfigAPI) SetModTest() {
 }
 
 //LoadFromFileEnv sets the value of the environment variable from a file (.env)
+func cpyFilesFromDocker() {
+	cmd := exec.Command("cp", "-prf", "../../docker/defaultValues.csv", DEFAULT_CSV_FILE)
+	cmd.Run()
+
+	cmd = exec.Command("cp", "-prf", "../../docker/.env", ".env")
+	cmd.Run()
+}
+
+//LoadFromFileEnv sets the value of the environment variable from a file (.env)
 func LoadFromFileEnv(file string) error {
+
+	cpyFilesFromDocker()
 	if file == "" {
 		file = ".env"
 	}
-
 	return godotenv.Load(file)
-
 }

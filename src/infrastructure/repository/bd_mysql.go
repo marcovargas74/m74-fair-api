@@ -14,6 +14,11 @@ const (
 
 	//NOT_DROP_DB CLEAR DATABASE
 	NOT_DROP_DB = false
+
+	INDEX_NAME         = 11
+	INDEX_DISTRICT     = 6
+	INDEX_REGION5      = 9
+	INDEX_NEIGHBORHOOD = 15
 )
 
 func exec(db *sql.DB, sql string) sql.Result {
