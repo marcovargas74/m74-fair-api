@@ -13,10 +13,10 @@ services:
       # DB_PASSWORD : my-secret-pw
       # DB_DATABASE : fairAPI
       # DB_IP  : localhost
-      # DB_PORT : 3307
+      DB_PORT : 3308
 
     ports:
-      - "3307:3306"
+      - "3308:3306"
 
   my-fair-api:    
     image: m74fairapi:latest 
@@ -24,9 +24,9 @@ services:
     environment: 
       MYSQL_URL: root:my-secret-pw@tcp(localhost:3307)/
       TYPE_APP: PROD
-      # SERVER_API_PORT_SQL: 5010
-      # SERVER_API_PORT_MEM: 5011
-      # LOG_FILE: ./fairAPIdocker.log
+      SERVER_API_PORT_SQL: 5000
+      SERVER_API_PORT_MEM: 5001
+      LOG_FILE: ./fairAPIdocker.log
 
     ports:      
       - "5000:5000"

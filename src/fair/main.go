@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 
 	"github.com/marcovargas74/m74-fair-api/src/api/handler"
@@ -9,14 +8,10 @@ import (
 	logs "github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
-//LogInFile write log to file
-var LogInFile *bool
-
 //GeneralConfigs  GENERAL Configuration
 var GeneralConfigs config.ConfigAPI
 
 func init() {
-	LogInFile = flag.Bool("log", false, "write log to file")
 
 	err := config.LoadFromFileEnv(config.DEFAULT_ENV_FILE)
 	if err != nil {

@@ -36,9 +36,9 @@ digraph CODE {
 </p>
 
 
-<p>
+<!-- <p>
   <img alt="In Development" align="center" src="atWork.png" />
-</p>
+</p> -->
 
 - Go API Fair. It also has a CRUD.
 
@@ -145,6 +145,55 @@ DB_PORT=3307
 ## Example: Configure to DEV MODE
 TYPE_APP=DEV
 ```
+
+  
+<p> 
+<h1 style="background-color:green;"></h1>
+
+ <img alt="In Development" align="left" src="brasil.png"  width="72px" height="42px" />
+ <h2 align="center">Sequência Para testar a API Go FAIR</h2>
+
+
+```sh
+
+
+#Para rodar a primeira vez é necessario usar o comando: 
+make dev
+
+#Isso, irá compilar a aplicação FAIR e montar o ambiente iniciando o
+#  Docker container do banco de dados MySQL ficando disponível na porta 3037. 
+#  Foi escolhido esta porta para evitar conflito caso a máquina host já possua 
+#  um MySQL rodando na porta default que é a 3036. 
+
+#Depois disso o sistema já deve estar pronto para ser testado, mas isso é 
+#  necessário somente na primeira vez, pois o Docker do BD MySQL fica rodando
+#  e a aplicação FAIR pode ser finalizada e iniciada quantas vezes for
+#  necessário. Para isso, só é preciso rodar o comando:
+
+make run 
+
+# Atenção: Ocorreu no decorrer do desenvolvimento, uma demora para a aplicação
+#  se conectar ao MySQL na primeira vez que foi rodado o comando Make DEV, 
+#  isso porque o Docker do MySQL demora um pouco pra ficar disponível. Caso
+#  isso ocorra, Proceda da seguinte forma: 
+#    1. Finalize somente a aplicação FAIR
+#    2. Espere alguns poucos minutos(3 minutos- sugestão) 
+#    3. Execute o comando: 
+make Run   
+
+# Após a aplicação FAIR iniciar, a API fica disponivel em duas portas  http, 
+#   a porta 5000 e a porta 5001. Quando se conecta no endereço http://localhost:5000, 
+#   a api salva e manipula os dados em memória, já no endereço http://localhost:5001 
+#   os dados são acessados no MySQL.
+
+## Para mais detalhes de outros comandos acesse o arquivo Makefile na raiz
+#    do projeto.
+
+```
+<h1 style="background-color:green;"></h1>
+
+</p>
+
 
 ## API Request
 

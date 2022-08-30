@@ -1,0 +1,808 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////home/intelbras/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.6.3/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <h2 align="center">API Go FAIR</h2>
+The Project is an API developed in golang that exposes data from fairs in general, registered in a MySQL database. This API, when started, is available at the address &quot;http://localhost:5001&quot; and can be accessed via a browser or any tool that uses the HTTP protocol and uses the resources (POST/GET/PUT/PATCH/DELETE). For testing the API is also available on port 5000 but in this case the data is saved in memory, which is lost as soon as the application is finished.
+<p>The project has a .json file (FairTestsMySQL.postman_collection.json/FairTestsInMemory.postman_collection.json) exported from the POSTMAN tool that can be used to test the endpoints.</p>
+<p>All source codes then in the src folder and were organized according to the Clean architecture.<br>
+It also has a Docker folder with a docker-composer file that can be used to assemble all the environment needed to run the application. In this it starts a MySQL database service that is available on port 3307 and also raises the DOCKER of the FAIR application which is the API in question.<br>
+(Sorry for the English. But I tried to make it as accessible as possible to most of the developer community.)</p>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.00.0-blue.svg?cacheSeconds=2592000">
+  <a href="#" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  </a>
+</p>
+<h2 class="mume-header" id="code-structure">Code structure</h2>
+
+<p>
+  <img alt=" Code Diagram" align="center" src="CodeDiagram.png">
+</p>
+<ul>
+<li>Go API Fair. It also has a CRUD.</li>
+</ul>
+<h2 class="mume-header" id="requirementsdependencies">Requirements/dependencies</h2>
+
+<ul>
+<li>GO</li>
+<li>Docker</li>
+<li>Docker-compose</li>
+<li>MySQL</li>
+</ul>
+<h2 class="mume-header" id="getting-started">Getting Started</h2>
+
+<ul>
+<li>
+<p>After installing Go and setting up your GOPATH,</p>
+</li>
+<li>
+<p><a href="https://github.com/larien/aprenda-go-com-testes/blob/master/primeiros-passos-com-go/instalacao-do-go.md">How To install Go</a></p>
+</li>
+<li>
+<p><a href="https://github.com/marcovargas74/m74-fair-api.git">Clone project</a></p>
+</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token function">git</span> clone https://github.com/marcovargas74/m74-fair-api.git
+</pre><ul>
+<li>HOW TO RUN</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"> <span class="token builtin class-name">cd</span> m74-fair-api
+
+ <span class="token comment">## start dockers</span>
+ <span class="token function">make</span> all
+
+ <span class="token comment">## stop dockers</span>
+ <span class="token function">make</span> stop
+
+ <span class="token comment">## start API in dev MODE </span>
+ <span class="token function">make</span> dev
+
+ <span class="token comment">## Run API in Local Machine and conect to a MySql in addr localhost:3037 To Default. </span>
+ <span class="token comment">## But can change addr and other config setting the .env file used the Envirment Var to set BD configure </span>
+ <span class="token function">make</span> run
+
+</pre><blockquote>
+<p>&#x26A0;&#xFE0F; <strong>DB can take up to 3 minutes to start</strong>: Be very careful here!</p>
+</blockquote>
+<h2 class="mume-header" id="running-project-locally-without-using-docker">Running Project Locally Without Using DOCKER</h2>
+
+<ul>
+<li>Enter in project</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token builtin class-name">cd</span> m74-fair-api/src/fair
+</pre><ul>
+<li>Build e RUN golang project</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"> <span class="token comment">## Run compiled project</span>
+	go run main.go
+</pre><ul>
+<li>Build golang project</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash">go build -o main.go
+</pre><ul>
+<li>Run api(port 5000)</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"> <span class="token comment">## Run compiled project in Test Mode</span>
+	<span class="token assign-left variable">TYPE_APP</span><span class="token operator">=</span>TEST go run main.go
+</pre><ul>
+<li>OTHER FEATURES OF MAKE</li>
+</ul>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"> <span class="token comment">## Test All Code (go test)</span>
+ <span class="token function">make</span> <span class="token builtin class-name">test</span>
+
+ <span class="token comment">## check test coverage (go coverage) and save in go-cover-fair.tmp</span>
+ <span class="token function">make</span> cover
+
+ <span class="token comment">## Run make test and cover  </span>
+ <span class="token function">make</span> tests
+
+</pre><h2 class="mume-header" id="how-to-configure">HOW TO CONFIGURE</h2>
+
+<pre data-role="codeBlock" data-info="sh" class="language-bash">The application uses environment variables to program itself.
+These variables must be configured before running the program. Otherwise, they assumed the default values.
+Next are the environment variables used <span class="token keyword keyword-in">in</span> the APP 
+
+<span class="token comment"># API Section</span>
+<span class="token assign-left variable">TYPE_APP</span><span class="token operator">=</span>PROD
+<span class="token assign-left variable">TYPE_APP</span><span class="token operator">=</span>DEV
+<span class="token assign-left variable">SERVER_API_PORT_MEM</span><span class="token operator">=</span>:5000
+<span class="token assign-left variable">SERVER_API_PORT_SQL</span><span class="token operator">=</span>:5001
+<span class="token assign-left variable">LOG_FILE</span><span class="token operator">=</span>./fairAPIdocker.log
+
+<span class="token comment"># Database Section</span>
+<span class="token assign-left variable">DB_USER</span><span class="token operator">=</span>root
+<span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span>my-secret-pw
+<span class="token assign-left variable">DB_DATABASE</span><span class="token operator">=</span>fairAPI
+<span class="token assign-left variable">DB_IP</span><span class="token operator">=</span>localhost
+<span class="token assign-left variable">DB_PORT</span><span class="token operator">=</span><span class="token number">3307</span>
+
+</pre><pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token comment">## Example: Configure to DEV MODE</span>
+<span class="token assign-left variable">TYPE_APP</span><span class="token operator">=</span>DEV
+</pre><a href>
+    <p>
+    <img alt="In Development" align="center" src="brasil.png" width="72px" height="62px">
+    </p><h2 align="center">Sequ&#xEA;ncia Para testar a API Go FAIR</h2>
+    <p></p>
+</a>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token comment">#Para rodar a primeira vez &#xE9; necessario usar o comando: </span>
+<span class="token function">make</span> dev
+
+<span class="token comment">#Isso, ir&#xE1; compilar a aplicacao FAIR e montar o ambiente iniciando o</span>
+<span class="token comment">#  Docker container do banco de dados MySQL ficando dispon&#xED;vel na porta 3037. </span>
+<span class="token comment">#  Foi escolhido esta porta para evitar conflito caso a m&#xE1;quina host j&#xE1; possua </span>
+<span class="token comment">#  um MySQL rodando na porta default que &#xE9; a 3036. </span>
+
+<span class="token comment">#Depois disso o sistema j&#xE1; deve estar pronto pra ser testado, mas isso &#xE9; </span>
+<span class="token comment">#  necess&#xE1;rio somente na primeira vez, pois o Docker do BD MySQL fica rodando</span>
+<span class="token comment">#  e a aplicacao FAIR pode ser finalizada e iniciada quantas vezes for</span>
+<span class="token comment">#  necess&#xE1;rio. Para isso, s&#xF3; &#xE9; preciso rodar o comando:</span>
+
+<span class="token function">make</span> run 
+
+<span class="token comment"># Aten&#xE7;&#xE3;o: Ocorreu no decorrer do desenvolvimento, uma demora pra a aplica&#xE7;&#xE3;o</span>
+<span class="token comment">#  se conectar ao MySQL na primeira vez que foi rodado o comando Make DEV, </span>
+<span class="token comment">#  isso porque o Docker do MySQL demora um pouco pra ficar disponivel. Caso</span>
+<span class="token comment">#  isso ocorra, Proceda da seguinte forma: </span>
+<span class="token comment">#    1. Finalize somente a aplica&#xE7;&#xE3;o FAIR</span>
+<span class="token comment">#    2. Espere alguns poucos minutos(3 minutos- sugest&#xE3;o) </span>
+<span class="token comment">#    3. Execute o comando: </span>
+<span class="token function">make</span> Run   
+
+
+<span class="token comment">## Para mais detalhes de outros comandos acesse o aquivo Makefile na raiz do projeto.</span>
+
+</pre><h2 class="mume-header" id="api-request">API Request</h2>
+
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th style="text-align:center">HTTP Method</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/fairs/fairs/import/{file}</code></td>
+<td style="text-align:center"><code>POST</code></td>
+<td style="text-align:center"><code>Import Values from .csv file</code></td>
+</tr>
+<tr>
+<td><code>/fairs</code></td>
+<td style="text-align:center"><code>POST</code></td>
+<td style="text-align:center"><code>Create a New Fair</code></td>
+</tr>
+<tr>
+<td><code>/fairs</code></td>
+<td style="text-align:center"><code>GET</code></td>
+<td style="text-align:center"><code>List All Fairs</code></td>
+</tr>
+<tr>
+<td><code>/fairs/{id}</code></td>
+<td style="text-align:center"><code>GET</code></td>
+<td style="text-align:center"><code>Return a Fair By ID</code></td>
+</tr>
+<tr>
+<td><code>/fairs?key=value</code></td>
+<td style="text-align:center"><code>GET</code></td>
+<td style="text-align:center"><code>Return a Fair By key</code></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td><code>/fairs/{id}</code></td>
+<td style="text-align:center"><code>PUT</code></td>
+<td style="text-align:center"><code>Update all data Fair By ID</code></td>
+</tr>
+<tr>
+<td><code>/fairs/{id}</code></td>
+<td style="text-align:center"><code>PATCH</code></td>
+<td style="text-align:center"><code>Update only some data of the fair By ID</code></td>
+</tr>
+<tr>
+<td><code>/fairs/{id}</code></td>
+<td style="text-align:center"><code>DELETE</code></td>
+<td style="text-align:center"><code>Delete a Fair By ID</code></td>
+</tr>
+</tbody>
+</table>
+<h2 class="mume-header" id="test-endpoints-api-using-curl">Test endpoints API using curl</h2>
+
+<ul>
+<li>
+<h4>Import Values from .csv file</h4>
+</li>
+</ul>
+<blockquote>
+<p>&#x26A0;&#xFE0F; <strong>This import can take up to 3 minutes to complete</strong>: Take a coffe!<br>
+<code>Request</code></p>
+</blockquote>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request POST <span class="token string">&apos;http://localhost:5000/fairs/import/defaultValues.csv&apos;</span> 
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="body" class="language-body"><code>HTTP/1.1 200 OK
+Date: Sun, 28 Aug 2022 17:28:16 GMT
+Content-Length: 41
+Content-Type: text/plain; charset=utf-8
+
+Sucesso ao Importar dados do arquivo .CSV
+
+</code></pre><ul>
+<li>
+<h4>Creating a new FAIR</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request POST <span class="token string">&apos;localhost:5000/fairs&apos;</span> <span class="token punctuation">\</span>
+--header <span class="token string">&apos;Content-Type: application/json&apos;</span> <span class="token punctuation">\</span>
+--data-raw <span class="token string">&apos;{
+    &quot;name&quot;: &quot;PRACA SANTA HELENA&quot;,
+    &quot;District&quot;: &quot;VILA PRUDENTE&quot;,
+    &quot;Region5&quot;: &quot;Leste&quot;,
+    &quot;neighborhood&quot; :&quot;VL ZELINA&quot;
+}&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">21</span><span class="token operator">:</span><span class="token number">25</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">129</span>
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;c24c2967-8599-494e-8685-f6ec681278df&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PRACA SANTA HELENA&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA PRUDENTE&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL ZELINA&quot;</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li>
+<h4>Listing ALL FAIRS</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET <span class="token string">&apos;localhost:5000/fairs&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">24</span><span class="token operator">:</span><span class="token number">47</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">570</span>
+
+<span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;e55887a9-2752-4009-9351-d3dc14d23675&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;MAR PAULISTA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PEDREIRA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Sul&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PEDREIRA&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;c24c2967-8599-494e-8685-f6ec681278df&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PRACA SANTA HELENA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA PRUDENTE&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL ZELINA&quot;</span>
+    <span class="token punctuation">}</span>
+    .
+    .
+    .
+<span class="token punctuation">]</span>
+
+</pre><ul>
+<li>
+<h4>Return a FAIR By ID</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET <span class="token string">&apos;http://localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;c24c2967-8599-494e-8685-f6ec681278df&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PRACA SANTA HELENA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA PRUDENTE&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL ZELINA&quot;</span>
+    <span class="token punctuation">}</span>
+
+</pre><ul>
+<li>
+<h4>Return a FAIR By Name</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET <span class="token string">&apos;http://localhost:5000/fairs?name=santa&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">24</span><span class="token operator">:</span><span class="token number">47</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">570</span>
+<span class="token punctuation">[</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;4677b3c4-1542-4d23-a8b6-adf35acb8b5f&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;5c88fd1c-a788-4437-a49c-0a71ed9e7a4a&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span>
+    .
+    .
+    .
+<span class="token punctuation">]</span>
+
+</pre><ul>
+<li>
+<h4>Return a FAIR By district</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET &apos;http://localhost:5000/fairs?district<span class="token operator">=</span>VILA
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">24</span><span class="token operator">:</span><span class="token number">47</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">570</span>
+<span class="token punctuation">[</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;4677b3c4-1542-4d23-a8b6-adf35acb8b5f&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;5c88fd1c-a788-4437-a49c-0a71ed9e7a4a&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span>
+    .
+    .
+    .
+<span class="token punctuation">]</span>
+
+</pre><ul>
+<li>
+<h4>Return a FAIR By region5</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET <span class="token string">&apos;http://localhost:5000/fairs?region5=este&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">24</span><span class="token operator">:</span><span class="token number">47</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">570</span>
+<span class="token punctuation">[</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;4677b3c4-1542-4d23-a8b6-adf35acb8b5f&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;5c88fd1c-a788-4437-a49c-0a71ed9e7a4a&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span>
+    .
+    .
+    .
+<span class="token punctuation">]</span>
+
+</pre><ul>
+<li>
+<h4>Return a FAIR By neighborhood</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request GET <span class="token string">&apos;http://localhost:5000/fairs?neighborhood=VL&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">24</span><span class="token operator">:</span><span class="token number">47</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">570</span>
+<span class="token punctuation">[</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;4677b3c4-1542-4d23-a8b6-adf35acb8b5f&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;5c88fd1c-a788-4437-a49c-0a71ed9e7a4a&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA FORMOSA&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Leste&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL FORMOSA&quot;</span>
+    <span class="token punctuation">}</span>
+    .
+    .
+    .
+<span class="token punctuation">]</span>
+
+</pre><ul>
+<li>
+<h4>Update all data Fair By ID</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request PUT <span class="token string">&apos;localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df&apos;</span> <span class="token punctuation">\</span>
+--header <span class="token string">&apos;Content-Type: application/json&apos;</span> <span class="token punctuation">\</span>
+--data-raw <span class="token string">&apos;{
+    &quot;name&quot;: &quot;PRACA NOVA&quot;,
+    &quot;District&quot;: &quot;VILA NOVA&quot;,
+    &quot;Region5&quot;: &quot;Sul&quot;,
+    &quot;neighborhood&quot; :&quot;VL NOVA&quot;
+}&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">21</span><span class="token operator">:</span><span class="token number">25</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">129</span>
+
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;c24c2967-8599-494e-8685-f6ec681278df&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PRACA NOVA&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA NOVA&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Sul&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VL NOVA&quot;</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li>
+<h4>Update only some data of the fair By ID</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request PATCH <span class="token string">&apos;localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df&apos;</span> <span class="token punctuation">\</span>
+--header <span class="token string">&apos;Content-Type: application/json&apos;</span> <span class="token punctuation">\</span>
+--data-raw <span class="token string">&apos;{
+    &quot;Region5&quot;: &quot;Norte&quot;,
+    &quot;neighborhood&quot; :&quot;NovoBairro&quot;
+}&apos;</span>
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="json" class="language-json">HTTP/<span class="token number">1.1</span> <span class="token number">200</span> OK
+Content-Type<span class="token operator">:</span> application/json
+Date<span class="token operator">:</span> Sun<span class="token punctuation">,</span> <span class="token number">28</span> Aug <span class="token number">2022</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">21</span><span class="token operator">:</span><span class="token number">25</span> GMT
+Content-Length<span class="token operator">:</span> <span class="token number">129</span>
+
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;c24c2967-8599-494e-8685-f6ec681278df&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;PRACA NOVA&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;district&quot;</span><span class="token operator">:</span> <span class="token string">&quot;VILA NOVA&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;region5&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Norte&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;neighborhood&quot;</span><span class="token operator">:</span> <span class="token string">&quot;NovoBairro&quot;</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li>
+<h4>Delete a Fair By ID</h4>
+</li>
+</ul>
+<p><code>Request</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -i --request DELETE <span class="token string">&apos;http://localhost:5000/fairs/c24c2967-8599-494e-8685-f6ec681278df&apos;</span> 
+</pre><p><code>Response</code></p>
+<pre data-role="codeBlock" data-info="body" class="language-body"><code>HTTP/1.1 200 OK
+Date: Sun, 28 Aug 2022 17:28:16 GMT
+Content-Length: 23
+Content-Type: text/plain; charset=utf-8
+
+Sucesso ao deletar dado
+
+</code></pre><h2 class="mume-header" id="code-status">Code status</h2>
+
+<ul>
+<li>Development</li>
+</ul>
+<h2 class="mume-header" id="next-steps">Next Steps</h2>
+
+<ul>
+<li>Make a refactory</li>
+<li>Fix run by docker-compose</li>
+<li>Add more tests</li>
+<li>make a endpoint to configure api</li>
+<li><a href="https://github.com/users/marcovargas74/projects/3/views/1">TO DO</a></li>
+</ul>
+<h2 class="mume-header" id="author">Author</h2>
+
+<ul>
+<li>Marco Antonio Vargas - <a href="https://github.com/marcovargas74">marcovargas74</a></li>
+</ul>
+<h2 class="mume-header" id="reference">Reference</h2>
+
+<ul>
+<li>After installing Go and setting up your GOPATH,</li>
+<li><a href="https://eltonminetto.dev/post/2020-06-29-clean-architecture-2anos-depois/">clean-architecture-2anos-depois - Ellton Minetto</a></li>
+</ul>
+<h2 class="mume-header" id="license">License</h2>
+
+<p>Copyright &#xA9; 2022 <a href="https://github.com/marcovargas74">marcovargas74</a>.<br>
+This project is <a href="LICENSE">MIT</a> licensed.</p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
