@@ -32,7 +32,7 @@ func main() {
 	logs.Debug("Get Configurations-> [%s] [%s] ", GeneralConfigs.APIServerPortSQL, GeneralConfigs.APIServerPortMem)
 
 	go handler.StartAPI_MySQL(GeneralConfigs.APIServerPortSQL)
-	go handler.StartAPI_Memory(GeneralConfigs.APIServerPortMem)
+	handler.StartAPI_Memory(GeneralConfigs.APIServerPortMem)
 
 	var input string
 	fmt.Scanln(&input)
