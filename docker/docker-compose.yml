@@ -9,23 +9,22 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: fairAPI
-      # DB_USER    : root
-      # DB_PASSWORD : my-secret-pw
-      # DB_DATABASE : fairAPI
+      DB_DATABASE : fairAPI
       # DB_IP  : localhost
-      DB_PORT : 3308
+      DB_PORT : 3307
 
     ports:
-      - "3308:3306"
+      - "3307:3306"
 
   my-fair-api:    
     image: m74fairapi:latest 
     container_name: m74fairapi 
+    restart: unless-stopped
     environment: 
       MYSQL_URL: root:my-secret-pw@tcp(localhost:3307)/
       TYPE_APP: PROD
-      SERVER_API_PORT_SQL: 5000
-      SERVER_API_PORT_MEM: 5001
+      SERVER_API_PORT_SQL: :5000
+      SERVER_API_PORT_MEM: :5001
       LOG_FILE: ./fairAPIdocker.log
 
     ports:      
