@@ -57,7 +57,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 	if r.Method == http.MethodPut && err != nil {
 		w.WriteHeader(http.StatusExpectationFailed)
 		fmt.Fprint(w, entity.ErrInvalidEntity.Error())
-		logs.Error("Invalid parameter(s) %s", err.Error())
+		logs.Error("%sInvalid parameter(s) %s", logs.ThisFunction(), err.Error())
 		return err
 	}
 
@@ -80,7 +80,7 @@ func handlerValidateUpdate(w http.ResponseWriter, r *http.Request, newData prese
 	if err = dataToUpdate.Validate(); err != nil {
 		w.WriteHeader(http.StatusExpectationFailed)
 		fmt.Fprint(w, err.Error())
-		logs.Error("Invalid parameter(s) %s", err.Error())
+		logs.Error("%sInvalid parameter(s) %s", logs.ThisFunction(), err.Error())
 		return err
 	}
 
@@ -96,18 +96,18 @@ func listFairs(service fair.UseCase) http.Handler {
 		key, value := presenter.SelectKeySearch(r)
 		if key == "" {
 			data, err = service.ListFairs()
-			logs.Debug("service.ListFairs() key[%s] value[%s] \n", key, value)
+			logs.Debug("%s key[%s] value[%s] \n", logs.ThisFunction(), key, value)
 		}
 
 		if key != "" {
 			data, err = service.SearchFairs(key, value)
-			logs.Debug("service.SearchFairs(key, value) key[%s] value[%s] ", key, value)
+			logs.Debug("%s key[%s] value[%s] ", logs.ThisFunction(), key, value)
 		}
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("Unknown ERROR: [%s]", err.Error())
+			logs.Error("%s Unknown ERROR: [%s]", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -122,7 +122,7 @@ func listFairs(service fair.UseCase) http.Handler {
 		if err := json.NewEncoder(w).Encode(toJSONList); err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("listFairs()Failed to convert data to JSON %s", err.Error())
+			logs.Error("%sFailed to convert data to JSON %s", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -137,7 +137,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("createFair()Failed to retrieve past data from endpoint [%s] ", err.Error())
+			logs.Error("%sFailed to retrieve past data from endpoint [%s] ", logs.ThisFunction(), err.Error())
 			return
 		}
 		defer r.Body.Close()
@@ -145,7 +145,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err = input.Validate(); err != nil {
 			w.WriteHeader(http.StatusExpectationFailed)
 			fmt.Fprint(w, entity.ErrInvalidEntity.Error())
-			logs.Error("Invalid parameter(s) %s", err.Error())
+			logs.Error("%sInvalid parameter(s) %s", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -153,7 +153,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, entity.ErrCannotBeCreated.Error())
-			logs.Error("createFair()Failed on Data Create %s", err.Error())
+			logs.Error("%sFailed on Data Create %s", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -162,7 +162,7 @@ func createFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("createFair()Failed to convert data to JSON %s", err.Error())
+			logs.Error("%sFailed to convert data to JSON %s", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -180,7 +180,7 @@ func getFair(service fair.UseCase) http.Handler {
 			return
 		}
 
-		logs.Debug("getFair()ID %s", id)
+		logs.Debug("%sID:[%s]", logs.ThisFunction(), id)
 
 		data, err := service.GetFair(id)
 		if err = handlerSearchError(w, data, err); err != nil {
@@ -191,7 +191,7 @@ func getFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("getFair()Failed to convert data to JSON %s", err.Error())
+			logs.Error("%sFailed to convert data to JSON %s", logs.ThisFunction(), err.Error())
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -210,7 +210,7 @@ func updateFair(service fair.UseCase) http.Handler {
 
 		dataToUpdate, err := service.GetFair(id)
 		if err = handlerSearchError(w, dataToUpdate, err); err != nil {
-			logs.Error("ERROR: [%s] ID [%v] did not find\n", entity.ErrInvalidID.Error(), id)
+			logs.Error("%sERROR: [%s] ID [%v] did not find\n", logs.ThisFunction(), entity.ErrInvalidID.Error(), id)
 			return
 		}
 
@@ -219,7 +219,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("updateFair()Failed to retrieve past data from endpoint %s \n", err.Error())
+			logs.Error("%sFailed to retrieve past data from endpoint %s ", logs.ThisFunction(), err.Error())
 			return
 		}
 		defer r.Body.Close()
@@ -231,7 +231,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err = service.UpdateFair(dataToUpdate); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("updateFair()Failed to update data %s", err.Error())
+			logs.Error("%sFailed to update data %s", logs.ThisFunction(), err.Error())
 			return
 		}
 
@@ -239,7 +239,7 @@ func updateFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusNotAcceptable)
 			fmt.Fprint(w, entity.ErrCannotConvertJSON.Error())
-			logs.Error("updateFair()Failed to convert data to JSON %s", err.Error())
+			logs.Error("%sFailed to convert data to JSON %s", logs.ThisFunction(), err.Error())
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -260,7 +260,7 @@ func deleteFair(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, entity.ErrCannotBeDeleted.Error())
-			logs.Error("deleteFair()Data deleted - FAILED Err[%s]", err.Error())
+			logs.Error("%sData deleted - FAILED Err[%s]", logs.ThisFunction(), err.Error())
 			return
 		}
 		fmt.Fprint(w, "Data deleted - SUCCESSFULLY")
@@ -282,7 +282,7 @@ func importFileCSV(service fair.UseCase) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprint(w, err.Error())
-			logs.Error("importFileCSV()Data imported FAILED from .CSV file %s", err.Error())
+			logs.Error("%s()Data imported FAILED from .CSV file %s", logs.ThisFunction(), err.Error())
 			return
 		}
 		fmt.Fprint(w, "Data imported SUCCESSFULLY from .CSV file")
