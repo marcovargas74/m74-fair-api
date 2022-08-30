@@ -32,7 +32,7 @@ func exec(db *sql.DB, sql string) sql.Result {
 //CreateDB Create Database and Tables if they don't exist yet
 func CreateDB(isDropTable bool) error {
 
-	logs.Info(" %s Starting the connection to MySQL URL:[%s], WAIT...", logs.ThisFunction(), config.DataBaseURL())
+	logs.Info(" %s Starting the connection to MySQL URL:[%s], WAIT...", logs.ThisFunction(), config.DataBaseURLLog())
 
 	db, err := sql.Open("mysql", config.DataBaseURL())
 	if err != nil {
@@ -45,7 +45,7 @@ func CreateDB(isDropTable bool) error {
 
 	time.Sleep(3 * time.Second)
 
-	logs.Info(" %s Connected To BASE [%s] do MySQL", logs.ThisFunction(), config.DataBaseURL())
+	logs.Info(" %s Connected To BASE [%s] do MySQL", logs.ThisFunction(), config.DataBaseURLLog())
 	exec(db, "create database if not exists fairAPI")
 	exec(db, "use fairAPI")
 	if isDropTable {
@@ -71,6 +71,6 @@ func OpenMysql() *sql.DB {
 		return nil
 	}
 
-	logs.Info(" %s Connected To BASE [%s] do MySQL", logs.ThisFunction(), config.DataBaseURL())
+	logs.Info(" %s Connected To BASE [%s] do MySQL", logs.ThisFunction(), config.DataBaseURLLog())
 	return db
 }

@@ -186,6 +186,17 @@ func DataBaseURL() string {
 
 }
 
+// DataBaseURLToLog Returns the URL of the Database used. Used in logger. Don't show the user and password
+func DataBaseURLLog() string {
+	dataBase := DataBaseURL()
+	i := strings.LastIndex(dataBase, "@")
+	if i == -1 {
+		return dataBase
+	}
+	return dataBase[i+1:]
+
+}
+
 //ConfigGetAPIGeneral Return GENERAL Configuration used in API
 func ConfigGetAPIGeneral() (ConfigAPI, error) {
 
