@@ -90,7 +90,7 @@ cd m74-fair-api/src/fair
 - Build e RUN golang project
 ```sh
  ## Run compiled project
-	go run main.go
+go run main.go
 ```
 
 - Build golang project
@@ -101,7 +101,7 @@ go build -o main.go
 - Run api(port 5000)
 ```sh
  ## Run compiled project in Test Mode
-	TYPE_APP=TEST go run main.go
+ TYPE_APP=TEST go run main.go
 ```
 
 - OTHER FEATURES OF MAKE
@@ -173,9 +173,10 @@ make dev
 make run 
 
 # Atenção: Ocorreu no decorrer do desenvolvimento, uma demora para a aplicação
-#  se conectar ao MySQL na primeira vez que foi rodado o comando Make DEV, 
-#  isso porque o Docker do MySQL demora um pouco pra ficar disponível. Caso
-#  isso ocorra, Proceda da seguinte forma: 
+#  se conectar ao MySQL na primeira vez que foi rodado o comando Make DEV. 
+#  Isso porque o Docker do MySQL demora um pouco pra ficar disponível. 
+#  Mas foi incluido uma proteção para tentar se conectar o banco toda vez que for
+#  acessado algum endpoint. Caso, isso ocorra, Proceda da seguinte forma: 
 #    1. Finalize somente a aplicação FAIR
 #    2. Espere alguns poucos minutos(3 minutos- sugestão) 
 #    3. Execute o comando: 
