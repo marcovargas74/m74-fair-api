@@ -540,8 +540,6 @@ Sucesso ao deletar dado
 - Development
 
 ## Next Steps 
-- Make a refactory
-- Fix run by docker-compose
 - Add more tests
 - make a endpoint to configure api
 - [TO DO](https://github.com/users/marcovargas74/projects/3/views/1)
