@@ -42,10 +42,27 @@ func NewFairMySQL(db *sql.DB) *FairMySQL {
 	}
 }
 
+//reconnectDB
+func (r *FairMySQL) reconnectDB() error {
+	CreateDB(NOT_DROP_DB)
+	r.db = OpenMysql()
+	return nil
+}
+
 func (r *FairMySQL) beginMysql() (*sql.Tx, error) {
+
+	err := r.db.Ping()
+	if err != nil {
+		logs.Error("%s PING() Err [%s]", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
+		time.Sleep(3 * time.Second)
+	}
+
 	tx, err := r.db.Begin()
 	if err != nil {
+		log.Println(err)
 		logs.Error("%s beginMysql() Err [%s]", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return nil, err
 
 	}
@@ -63,7 +80,8 @@ func (r *FairMySQL) Create(e *entity.Fair) (entity.ID, error) {
 
 	stmt, err := tx.Prepare("insert into fair (id, name, district, region5, neighborhood, created_at)values(?,?,?,?,?,?)")
 	if err != nil {
-		logs.Error("%s Err [%s] Could not prepare transaction on DB ", logs.ThisFunction(), err.Error())
+		logs.Error("%s Err [%s] Could not prepare transaction on DB - Try Again! ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return e.ID, err
 	}
 
@@ -91,16 +109,16 @@ func (r *FairMySQL) Get(id entity.ID) (*entity.Fair, error) {
 
 	tx, err := r.beginMysql()
 	if err != nil {
-		log.Println(err)
 		logs.Error("%s Err [%s] Could not access the DB ", logs.ThisFunction(), err.Error())
 		return nil, err
 	}
 
-	logs.Debug("Get(ID: %s)", id)
+	logs.Debug("%sGet(ID: %s)", logs.ThisFunction(), id)
 
 	stmt, err := tx.Prepare("select id, name, district, region5, neighborhood, created_at from fair where id = ?")
 	if err != nil {
-		logs.Error("%s Err [%s] Could not prepare transaction on DB ", logs.ThisFunction(), err.Error())
+		logs.Error("%s Err [%s] Could not prepare transaction on DB - Try Again! ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return nil, err
 	}
 
@@ -134,7 +152,8 @@ func (r *FairMySQL) Update(e *entity.Fair) error {
 
 	stmt, err := tx.Prepare("update fair set name = ?, district = ?, region5 = ?, neighborhood = ?, updated_at = ? where id = ?")
 	if err != nil {
-		logs.Error("%s Err [%s] Could not prepare transaction on DB ", logs.ThisFunction(), err.Error())
+		logs.Error("%s Err [%s] Could not prepare transaction on DB - Try Again! ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return err
 	}
 
@@ -157,11 +176,16 @@ func (r *FairMySQL) Update(e *entity.Fair) error {
 func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 
 	logs.Debug("%s (key[%s]value[%s]) IN BD", logs.ThisFunction(), key, value)
+	err := r.db.Ping()
+	if err != nil {
+		r.reconnectDB()
+	}
 
 	search_param := fmt.Sprintf("select id, name, district, region5, neighborhood, created_at from fair where %s like ?", key)
 	stmt, err := r.db.Prepare(search_param)
 	if err != nil {
-		logs.Error("%s Err [%s] Could not prepare transaction on DB ", logs.ThisFunction(), err.Error())
+		logs.Error("%s Err [%s] Could not prepare transaction on DB - Try Again! ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return nil, err
 	}
 
@@ -195,9 +219,15 @@ func (r *FairMySQL) Search(key string, value string) ([]*entity.Fair, error) {
 //List All Fairs Save in DB
 func (r *FairMySQL) List() ([]*entity.Fair, error) {
 
+	err := r.db.Ping()
+	if err != nil {
+		r.reconnectDB()
+	}
+
 	rows, err := r.db.Query("select id, name, district, region5, neighborhood, created_at from fair")
 	if err != nil {
 		logs.Error(" %s Err [%s] Could not execute a Query on DB ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return nil, err
 	}
 	defer rows.Close()
@@ -232,7 +262,8 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 
 	stmt, err := tx.Prepare("delete from fair where id = ?")
 	if err != nil {
-		logs.Error("%s Err [%s] Could not prepare transaction on DB ", logs.ThisFunction(), err.Error())
+		logs.Error("%s Err [%s] Could not prepare transaction on DB - Try Again! ", logs.ThisFunction(), err.Error())
+		r.reconnectDB()
 		return err
 	}
 
@@ -255,6 +286,18 @@ func (r *FairMySQL) Delete(id entity.ID) error {
 
 //ImportFile Import data From CSV file To MySQL
 func (r *FairMySQL) ImportFile(filepath string) error {
+
+	err := r.db.Ping()
+	if err != nil {
+		r.reconnectDB()
+		time.Sleep(3 * time.Second)
+		err = r.db.Ping()
+		if err != nil {
+			logs.Error("%s FAILURE to OPEN to MySQL Err[%v]", logs.ThisFunction(), err.Error())
+			return err
+		}
+
+	}
 
 	csvFile, err := os.Open(filepath)
 	if err != nil {

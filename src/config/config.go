@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	VERSION_PACKAGE = "2022-08-27"
+	VERSION_PACKAGE = "2022-08-30"
 
 	DEFAULT_DB_USER     = "root"
 	DEFAULT_DB_PASSWORD = "my-secret-pw"
