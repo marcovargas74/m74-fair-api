@@ -32,7 +32,7 @@ digraph CODE {
 }
 ``` -->
 <p>
-  <img alt=" Code Diagram" align="center" src="CodeDiagram.png" />
+  <img alt=" Code Diagram" align="center" src="/doc/CodeDiagram.png" />
 </p>
 
 
@@ -150,7 +150,7 @@ TYPE_APP=DEV
 <p> 
 <h1 style="background-color:green;"></h1>
 
- <img alt="In Development" align="left" src="brasil.png"  width="72px" height="42px" />
+ <img alt="In Development" align="left" src="doc/brasil.png"  width="72px" height="42px" />
  <h2 align="center">Sequência Para testar a API Go FAIR</h2>
 
 
