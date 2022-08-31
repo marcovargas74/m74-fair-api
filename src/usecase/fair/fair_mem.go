@@ -40,6 +40,7 @@ func (r *inmem) Create(e *entity.Fair) (entity.ID, error) {
 //Get a Fair
 func (r *inmem) Get(id entity.ID) (*entity.Fair, error) {
 	if r.m[id] == nil {
+		logs.Warn("%s(ID: %s) Err [%s] Could not \"SCAN\" on MEMORY ", logs.ThisFunction(), id, err.Error())
 		return nil, entity.ErrNotFound
 	}
 	return r.m[id], nil
@@ -49,6 +50,7 @@ func (r *inmem) Get(id entity.ID) (*entity.Fair, error) {
 func (r *inmem) Update(e *entity.Fair) error {
 	_, err := r.Get(e.ID)
 	if err != nil {
+		logs.Error("%s Err [%s] Fail to \"UPDATE\" DATA in MEMERY[%s]", logs.ThisFunction(), err.Error(), e.ID)
 		return err
 	}
 	r.m[e.ID] = e
@@ -106,6 +108,7 @@ func (r *inmem) List() ([]*entity.Fair, error) {
 //Delete a Fair
 func (r *inmem) Delete(id entity.ID) error {
 	if r.m[id] == nil {
+		logs.Error("%s(id[%s]) Err [%s] Fail to \"DELETE\" DATA in MEMORY", logs.ThisFunction(), id, err.Error())
 		return entity.ErrNotFound
 	}
 	r.m[id] = nil
