@@ -48,23 +48,23 @@ func NewServerAPIMemory() *ServerAPI {
 
 }
 
-//StartAPI_Memory Inicia Servidor http que vai prover a API salva dados em memoria
+//StartAPI_Memory Start http server which will provide API save data in memory
 func StartAPI_Memory(portToAcessAPI string) {
 	servidor := NewServerAPIMemory()
 
 	logs.Info("%s Started successfully at port-> %v", logs.ThisFunction(), portToAcessAPI)
 	if err := http.ListenAndServe(portToAcessAPI, servidor); err != nil {
-		logs.Error("Failed to connect to port-> %v %v", portToAcessAPI, err)
+		logs.Error("%sFailed to connect to port-> %v %v", logs.ThisFunction(), portToAcessAPI, err)
 	}
 }
 
-//StartAPI_MySQL Inicia Servidor http que vai prover a API salva os dados no MySQL
+//StartAPI_MySQL Start http server which will provide API save data in MySQL
 func StartAPI_MySQL(portToAcessAPI string) {
 	servidor := NewServerAPIMySQL()
 
 	logs.Info("%s Started successfully at port-> %v", logs.ThisFunction(), portToAcessAPI)
 	if err := http.ListenAndServe(portToAcessAPI, servidor); err != nil {
-		logs.Error("Failed to connect to port-> %v %v", portToAcessAPI, err)
+		logs.Error("%sFailed to connect to port-> %v %v", logs.ThisFunction(), portToAcessAPI, err)
 	}
 }
 
@@ -81,7 +81,6 @@ func NewServerAPIMySQL() *ServerAPI {
 	)
 
 	repository.CreateDB(repository.NOT_DROP_DB)
-	//repository.CreateDB(repository.DROP_DB)
 	db := repository.OpenMysql()
 	fairRepo := repository.NewFairMySQL(db)
 
