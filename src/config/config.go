@@ -18,7 +18,7 @@ const (
 	DEFAULT_DB_PASSWORD = "my-secret-pw"
 	DEFAULT_DB_DATABASE = "fairAPI"
 	DEFAULT_DB_ADDRESS  = "localhost"
-	DEFAULT_DB_PORT     = "3307"
+	DEFAULT_DB_PORT     = ":3307"
 	DEFAULT_URL_MYSQL   = "root:my-secret-pw@tcp(localhost:3307)/fairAPI?parseTime=true"
 
 	DEFAULT_SERVER_API_PORT_MEM = ":5000"
@@ -68,7 +68,7 @@ type ConfigAPI struct {
 	MYSQLPassword string `default:"my-secret-pw"`
 	MYSQLDatabase string `default:"fairAPI"`
 	MYSQLAddress  string `default:"localhost"`
-	MYSQLPortTCP  string `default:"3307"`
+	MYSQLPortTCP  string `default:":3307"`
 
 	//API
 	APIServerPortMem string `default:":5000"`
@@ -149,7 +149,7 @@ func ConfigGetMysqlURL() (string, error) {
 		logs.Error("%s Fail to Get MySQL Configurations->[%v] ", logs.ThisFunction(), err.Error())
 		return DEFAULT_URL_MYSQL, err
 	}
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?parseTime=true",
 		mySQLConfig.MYSQLUser, mySQLConfig.MYSQLPassword, mySQLConfig.MYSQLAddress, mySQLConfig.MYSQLPortTCP, mySQLConfig.MYSQLDatabase)
 
 	return dataSourceName, err

@@ -137,7 +137,7 @@ DB_USER=root
 DB_PASSWORD=my-secret-pw
 DB_DATABASE=fairAPI
 DB_IP=localhost
-DB_PORT=3307
+DB_PORT=:3307
 
 ```
 

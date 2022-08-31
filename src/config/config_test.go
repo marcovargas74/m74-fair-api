@@ -51,7 +51,7 @@ func TestConfigGetMysqlURL(t *testing.T) {
 			os.Setenv(_DB_ADDRESS, tt.wantAddr)
 			os.Setenv(_DB_PORT, tt.wantPort)
 
-			wantURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+			wantURL := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?parseTime=true",
 				tt.wantUser, tt.wantPass, tt.wantAddr, tt.wantPort, tt.wantDatabase)
 
 			url, _ := ConfigGetMysqlURL()
