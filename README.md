@@ -163,7 +163,7 @@ make dev
 #Isso, irá compilar a aplicação FAIR e montar o ambiente iniciando o
 #  Docker container do banco de dados MySQL ficando disponível na porta 3037. 
 #  Foi escolhido esta porta para evitar conflito caso a máquina host já possua 
-#  um MySQL rodando na porta default que é a 3036. 
+#  um MySQL rodando na porta default que é a 3306. 
 
 #Depois disso o sistema já deve estar pronto para ser testado, mas isso é 
 #  necessário somente na primeira vez, pois o Docker do BD MySQL fica rodando
