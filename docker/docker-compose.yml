@@ -22,8 +22,8 @@ services:
     environment: 
       MYSQL_URL: root:my-secret-pw@tcp(localhost:3307)/
       TYPE_APP: PROD
-      SERVER_API_PORT_SQL: :5000
-      SERVER_API_PORT_MEM: :5001
+      SERVER_API_PORT_MEM: :5000
+      SERVER_API_PORT_SQL: :5001
       LOG_FILE: ./fairAPIdocker.log
 
     ports:      
