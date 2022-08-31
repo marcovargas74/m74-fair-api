@@ -47,23 +47,27 @@ func Start(isProg bool, filepath string) {
 		Logger = zerolog.New(os.Stdout)
 		return
 	}
-	Logger.Debug().Msg(" ------Log STARTED!-------")
+	Logger.Debug().Msg(" ------LOG STARTED!-------")
 	Logger = zerolog.New(AppFileLog).With().Timestamp().Logger()
 
 }
 
+//Info type log
 func Info(format string, a ...interface{}) {
 	Logger.Info().Msgf(format, a...)
 }
 
+//Warn type log
 func Warn(format string, a ...interface{}) {
 	Logger.Warn().Msgf(format, a...)
 }
 
+//Error type log
 func Error(format string, a ...interface{}) {
 	Logger.Error().Msgf(format, a...)
 }
 
+//Debug type log
 func Debug(format string, a ...interface{}) {
 	Logger.Debug().Msgf(format, a...)
 }
