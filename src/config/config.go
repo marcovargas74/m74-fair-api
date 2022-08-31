@@ -141,7 +141,7 @@ func NewConfigAPI() (ConfigAPI, error) {
 	return config, nil
 }
 
-//ConfigGetMysqlURL retorna o endereço URL do banco de dados
+//ConfigGetMysqlURL Returns the URL address of the database
 func ConfigGetMysqlURL() (string, error) {
 
 	mySQLConfig, err := NewConfigAPI()
@@ -159,7 +159,7 @@ func ConfigGetMysqlURL() (string, error) {
 func DataBaseName() string {
 	dataBase, err := ConfigGetMysqlURL()
 	if err != nil {
-		logs.Warn("Using DEFAULT DB err:[%v] ", err.Error())
+		logs.Warn("%sUsing DEFAULT DB err:[%v] ", logs.ThisFunction(), err.Error())
 	}
 
 	i := strings.LastIndex(dataBase, "/")
@@ -175,7 +175,7 @@ func DataBaseName() string {
 func DataBaseURL() string {
 	dataBase, err := ConfigGetMysqlURL()
 	if err != nil {
-		logs.Warn("Using DEFAULT DB err:[%v] ", err.Error())
+		logs.Warn("%sUsing DEFAULT DB err:[%v] ", logs.ThisFunction(), err.Error())
 	}
 
 	i := strings.LastIndex(dataBase, "/")
@@ -203,11 +203,11 @@ func ConfigGetAPIGeneral() (ConfigAPI, error) {
 	myConfigs, err := NewConfigAPI()
 
 	if err != nil && err != entity.ErrDefaultConfig {
-		logs.Error("Fail to Get APIs GENERAL Configurations-> %v ", err.Error())
+		logs.Error("%sFail to Get APIs GENERAL Configurations-> %v ", logs.ThisFunction(), err.Error())
 		return myConfigs, err
 	}
 
-	logs.Debug("   Get APIs GENERAL Configurations-> %v ", myConfigs)
+	logs.Debug("%s Get APIs GENERAL Configurations-> %v ", logs.ThisFunction(), myConfigs)
 	return myConfigs, nil
 }
 

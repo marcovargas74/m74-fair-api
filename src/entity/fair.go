@@ -30,7 +30,7 @@ func NewFair(name string, district string, region5 string, neighborhood string) 
 	}
 	err := f.Validate()
 	if err != nil {
-		logs.Error("NewFair(*) Err [%s] Could not create a entityFair", err.Error())
+		logs.Error("%s Err [%s] Could not create a entityFair", logs.ThisFunction(), err.Error())
 		return nil, ErrInvalidEntity
 	}
 	return f, nil
@@ -40,7 +40,7 @@ func NewFair(name string, district string, region5 string, neighborhood string) 
 func (f *Fair) Validate() error {
 
 	if errs := validator.Validate(f); errs != nil {
-		logs.Error("NewFair(*) Err [%s] Could not create a entityFair", errs.Error())
+		logs.Error("%s Err [%s] Could not create a entityFair", logs.ThisFunction(), errs.Error())
 		return errs
 	}
 
