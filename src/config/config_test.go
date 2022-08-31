@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/magiconair/properties/assert"
-	"github.com/marcovargas74/m74-fair-api/src/infrastructure/logs"
 )
 
 func TestConfigGetMysqlURL(t *testing.T) {
@@ -56,7 +55,6 @@ func TestConfigGetMysqlURL(t *testing.T) {
 				tt.wantUser, tt.wantPass, tt.wantAddr, tt.wantPort, tt.wantDatabase)
 
 			url, _ := ConfigGetMysqlURL()
-			logs.Debug("  ConfigGetMysqlURL()..url[%s]want[%s]\n", url, wantURL)
 			assert.Equal(t, url, wantURL)
 		})
 
@@ -75,7 +73,6 @@ func TestConfigGetMysqlURLDefault(t *testing.T) {
 
 	os.Clearenv()
 	url, _ := ConfigGetMysqlURL()
-	logs.Debug("  ConfigGetMysqlURL()..url[%s]want[%s]\n", url, wantURL)
 	assert.Equal(t, url, wantURL)
 }
 
@@ -123,7 +120,6 @@ func TestConfigGetAPIGeneral(t *testing.T) {
 			os.Setenv(_LOG_FILE, tt.wantLogFile)
 
 			tc, _ := ConfigGetAPIGeneral()
-			logs.Debug("  TestConfigGetAPIGeneral()..isProd[%s]portM[%s]portDB[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL)
 			assert.Equal(t, tc.APITypeApp, tt.wantTypeApp)
 			assert.Equal(t, tc.APIServerPortMem, tt.wantPortMem)
 			assert.Equal(t, tc.APIServerPortSQL, tt.wantPortSQL)
@@ -147,7 +143,6 @@ func TestConfigAPIGeneralDefault(t *testing.T) {
 
 	os.Clearenv()
 	tc, _ := ConfigGetAPIGeneral()
-	logs.Debug("  TestConfigAPIGeneralDefault()..isProd[%s]portM[%s]portDB[%s]fLog[%s]\n", tc.APITypeApp, tc.APIServerPortMem, tc.APIServerPortSQL, tc.APILogFile)
 	assert.Equal(t, tc.APITypeApp, want.APITypeApp)
 	assert.Equal(t, tc.APIServerPortMem, want.APIServerPortMem)
 	assert.Equal(t, tc.APIServerPortSQL, want.APIServerPortSQL)
