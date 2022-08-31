@@ -7,5 +7,5 @@ import (
 )
 
 func TestFairMySQL(t *testing.T) {
-	assert.Equal(t, "TODO", "TODO")
+	assert.Equal(t, nil, nil)
 }

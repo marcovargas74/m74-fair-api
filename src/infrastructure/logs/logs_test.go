@@ -7,14 +7,10 @@ import (
 )
 
 func TestThisFunction(t *testing.T) {
-	//fair, err := entity.NewFair("PRACA SANTA HELENA", "VILA PRUDENTE", "Leste", "VL ZELINA")
-	//assert.Equal(t, err, nil)
-	assert.Equal(t, ThisFunction(), "logs.TestThisFunction(12)")
+	assert.Equal(t, ThisFunction(), "logs.TestThisFunction(10)")
 }
 
 func TestChopPath(t *testing.T) {
-	//fair, err := entity.NewFair("PRACA SANTA HELENA", "VILA PRUDENTE", "Leste", "VL ZELINA")
-	//assert.Equal(t, err, nil)
 	assert.Equal(t, chopPath("aDirName/fileName"), "fileName")
 	assert.Equal(t, chopPath("aDirName/"), "")
 	assert.Equal(t, chopPath("aDirName/aDirName/aDirName/aDirName/123"), "123")
