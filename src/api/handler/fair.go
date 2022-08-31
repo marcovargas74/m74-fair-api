@@ -111,7 +111,6 @@ func listFairs(service fair.UseCase) http.Handler {
 			return
 		}
 
-		//----- Mosta o Retorno da busca
 		var toJSONList []*presenter.Fair
 		for _, d := range data {
 			toJSON := presenter.NewCreateFairPresenter(d)
@@ -291,7 +290,7 @@ func importFileCSV(service fair.UseCase) http.Handler {
 	})
 }
 
-//MakeFairHandlers Cria Rotas usado para manipular a Feira
+//MakeFairHandlers Create Routes used to manipulate the Fair
 func MakeFairHandlers(r *mux.Router, n negroni.Negroni, service fair.UseCase) {
 
 	r.Handle("/fairs", n.With(negroni.Wrap(listFairs(service)))).Methods("GET").Name("listFairs")
