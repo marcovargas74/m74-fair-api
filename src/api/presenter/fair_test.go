@@ -1,7 +1,6 @@
 package presenter
 
 import (
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -69,9 +68,6 @@ func TestSelectKeySearch(t *testing.T) {
 		t.Run(tt.give, func(t *testing.T) {
 			request, _ := http.NewRequest(http.MethodGet, tt.inData, nil)
 			key, value := SelectKeySearch(request)
-
-			fmt.Printf(".....testS[%s] [%s]\n", key, value)
-
 			assert.Equal(t, key, tt.wantKey)
 			assert.Equal(t, value, tt.wantValue)
 		})
